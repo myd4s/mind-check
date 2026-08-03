@@ -1,0 +1,11 @@
+{
+    "version": "0.0.1",
+    "configurations": [
+        {
+            "name": "mindcheck-dev",
+            "runtimeExecutable": "composer",
+            "runtimeArgs": ["run", "dev"],
+            "port": 8000
+        }
+    ]
+}
