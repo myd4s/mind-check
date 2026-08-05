@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        @apply bg-surface text-slate-700;
+    }
+
+    ::selection {
+        @apply bg-primary-200 text-primary-900;
+    }
+}
+
+@layer components {
+    /* Permukaan neumorphism dasar: "timbul" dari background surface via dual shadow. */
+    .neu-raised {
+        @apply bg-surface-card shadow-neu;
+    }
+
+    .neu-raised-sm {
+        @apply bg-surface-card shadow-neu-sm;
+    }
+
+    /* Permukaan "tenggelam" — dipakai untuk input/select/search/tab tidak aktif. */
+    .neu-inset {
+        @apply bg-surface shadow-neu-inset;
+    }
+
+    .neu-inset-sm {
+        @apply bg-surface shadow-neu-inset-sm;
+    }
+
+    /* Kartu konten standar: kombinasi raised + radius besar khas neumorphism. */
+    .neu-card {
+        @apply neu-raised rounded-3xl;
+    }
+
+    /* Tombol/ikon bulat yang menekan (scale) saat aktif, tanpa gradient. */
+    .neu-pressable {
+        @apply transition-all duration-200 ease-out active:scale-95;
+    }
+
+    /* Scrollbar tipis untuk sidebar & area scroll horizontal tabel. */
+    .neu-scrollbar {
+        scrollbar-width: thin;
+        scrollbar-color: theme('colors.primary.200') transparent;
+    }
+
+    .neu-scrollbar::-webkit-scrollbar {
+        height: 8px;
+        width: 8px;
+    }
+
+    .neu-scrollbar::-webkit-scrollbar-thumb {
+        @apply bg-primary-200 rounded-full;
+    }
+
+    .neu-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+}
