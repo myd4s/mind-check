@@ -60,7 +60,7 @@ new class extends Component
 
     {{-- Sidebar --}}
     <aside
-        class="fixed inset-y-0 left-0 z-40 flex w-72 -translate-x-full transform flex-col bg-surface p-4 transition-transform duration-300 ease-out lg:translate-x-0"
+        class="fixed inset-y-0 left-0 z-40 flex w-72 -translate-x-full transform flex-col border-r border-surface-inset bg-surface shadow-neu-sm p-4 transition-transform duration-300 ease-out lg:translate-x-0"
         :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
     >
         <div class="flex items-center justify-between px-1.5 py-2">
@@ -77,49 +77,115 @@ new class extends Component
                 {{ __('Dashboard') }}
             </x-sidebar-link>
 
-            <x-sidebar-section label="{{ __('Asesmen Saya') }}" />
-            <x-sidebar-sublink :href="route('siswa.available-assessments')" :active="request()->routeIs('siswa.available-assessments')">
-                {{ __('Asesmen Tersedia') }}
-            </x-sidebar-sublink>
-            <x-sidebar-sublink :href="route('siswa.history')" :active="request()->routeIs('siswa.history')">
-                {{ __('Riwayat Asesmen') }}
-            </x-sidebar-sublink>
+            @php
+                $assessmentMenuActive = request()->routeIs('siswa.available-assessments', 'siswa.history');
+            @endphp
+            <x-sidebar-menu-group
+                label="{{ __('Asesmen Saya') }}"
+                icon="clipboard-list"
+                :activeSubmenu="$assessmentMenuActive"
+            >
+                <x-sidebar-sublink
+                    :href="route('siswa.available-assessments')"
+                    :active="request()->routeIs('siswa.available-assessments')"
+                    icon="clipboard-check"
+                >
+                    {{ __('Asesmen Tersedia') }}
+                </x-sidebar-sublink>
+                <x-sidebar-sublink
+                    :href="route('siswa.history')"
+                    :active="request()->routeIs('siswa.history')"
+                    icon="chart-bar"
+                >
+                    {{ __('Riwayat Asesmen') }}
+                </x-sidebar-sublink>
+            </x-sidebar-menu-group>
 
             <x-sidebar-link :href="route('siswa.content-library')" icon="book-open" :active="request()->routeIs('siswa.content-library', 'siswa.content-detail')">
                 {{ __('Literasi') }}
             </x-sidebar-link>
 
             @if (auth()->user()->hasRoleAtLeast(\App\Enums\UserRole::GuruBk))
-                <x-sidebar-section label="{{ __('Data Master') }}" />
-                <x-sidebar-sublink :href="route('guru-bk.academic-years')" :active="request()->routeIs('guru-bk.academic-years')">
-                    {{ __('Tahun Ajaran') }}
-                </x-sidebar-sublink>
-                <x-sidebar-sublink :href="route('guru-bk.school-classes')" :active="request()->routeIs('guru-bk.school-classes')">
-                    {{ __('Kelas') }}
-                </x-sidebar-sublink>
-                <x-sidebar-sublink :href="route('guru-bk.students')" :active="request()->routeIs('guru-bk.students')">
-                    {{ __('Siswa') }}
-                </x-sidebar-sublink>
-                <x-sidebar-sublink :href="route('guru-bk.class-promotion')" :active="request()->routeIs('guru-bk.class-promotion')">
-                    {{ __('Kenaikan Kelas') }}
-                </x-sidebar-sublink>
+                @php
+                    $dataMasterMenuActive = request()->routeIs('guru-bk.academic-years', 'guru-bk.school-classes', 'guru-bk.students', 'guru-bk.class-promotion');
+                    $assessmentMenuActive = request()->routeIs('guru-bk.questions', 'guru-bk.assessments', 'guru-bk.assessment-schedules', 'guru-bk.results', 'guru-bk.contents');
+                @endphp
+                <x-sidebar-menu-group
+                    label="{{ __('Data Master') }}"
+                    icon="clipboard-list"
+                    :activeSubmenu="$dataMasterMenuActive"
+                >
+                    <x-sidebar-sublink
+                        :href="route('guru-bk.academic-years')"
+                        :active="request()->routeIs('guru-bk.academic-years')"
+                        icon="calendar"
+                    >
+                        {{ __('Tahun Ajaran') }}
+                    </x-sidebar-sublink>
+                    <x-sidebar-sublink
+                        :href="route('guru-bk.school-classes')"
+                        :active="request()->routeIs('guru-bk.school-classes')"
+                        icon="user-group"
+                    >
+                        {{ __('Kelas') }}
+                    </x-sidebar-sublink>
+                    <x-sidebar-sublink
+                        :href="route('guru-bk.students')"
+                        :active="request()->routeIs('guru-bk.students')"
+                        icon="users"
+                    >
+                        {{ __('Siswa') }}
+                    </x-sidebar-sublink>
+                    <x-sidebar-sublink
+                        :href="route('guru-bk.class-promotion')"
+                        :active="request()->routeIs('guru-bk.class-promotion')"
+                        icon="check-circle"
+                    >
+                        {{ __('Kenaikan Kelas') }}
+                    </x-sidebar-sublink>
+                </x-sidebar-menu-group>
 
-                <x-sidebar-section label="{{ __('Asesmen') }}" />
-                <x-sidebar-sublink :href="route('guru-bk.questions')" :active="request()->routeIs('guru-bk.questions')">
-                    {{ __('Bank Soal') }}
-                </x-sidebar-sublink>
-                <x-sidebar-sublink :href="route('guru-bk.assessments')" :active="request()->routeIs('guru-bk.assessments')">
-                    {{ __('Assessment') }}
-                </x-sidebar-sublink>
-                <x-sidebar-sublink :href="route('guru-bk.assessment-schedules')" :active="request()->routeIs('guru-bk.assessment-schedules')">
-                    {{ __('Jadwal Assessment') }}
-                </x-sidebar-sublink>
-                <x-sidebar-sublink :href="route('guru-bk.results')" :active="request()->routeIs('guru-bk.results')">
-                    {{ __('Hasil Assessment') }}
-                </x-sidebar-sublink>
-                <x-sidebar-sublink :href="route('guru-bk.contents')" :active="request()->routeIs('guru-bk.contents')">
-                    {{ __('Konten Literasi') }}
-                </x-sidebar-sublink>
+                <x-sidebar-menu-group
+                    label="{{ __('Asesmen') }}"
+                    icon="clipboard-check"
+                    :activeSubmenu="$assessmentMenuActive"
+                >
+                    <x-sidebar-sublink
+                        :href="route('guru-bk.questions')"
+                        :active="request()->routeIs('guru-bk.questions')"
+                        icon="document-text"
+                    >
+                        {{ __('Bank Soal') }}
+                    </x-sidebar-sublink>
+                    <x-sidebar-sublink
+                        :href="route('guru-bk.assessments')"
+                        :active="request()->routeIs('guru-bk.assessments')"
+                        icon="chart-pie"
+                    >
+                        {{ __('Assessment') }}
+                    </x-sidebar-sublink>
+                    <x-sidebar-sublink
+                        :href="route('guru-bk.assessment-schedules')"
+                        :active="request()->routeIs('guru-bk.assessment-schedules')"
+                        icon="calendar"
+                    >
+                        {{ __('Jadwal Assessment') }}
+                    </x-sidebar-sublink>
+                    <x-sidebar-sublink
+                        :href="route('guru-bk.results')"
+                        :active="request()->routeIs('guru-bk.results')"
+                        icon="chart-bar"
+                    >
+                        {{ __('Hasil Assessment') }}
+                    </x-sidebar-sublink>
+                    <x-sidebar-sublink
+                        :href="route('guru-bk.contents')"
+                        :active="request()->routeIs('guru-bk.contents')"
+                        icon="book-open"
+                    >
+                        {{ __('Konten Literasi') }}
+                    </x-sidebar-sublink>
+                </x-sidebar-menu-group>
             @endif
 
             @if (auth()->user()->hasRoleAtLeast(\App\Enums\UserRole::Admin))
