@@ -39,9 +39,9 @@ new class extends Component
 }; ?>
 
 <div
-    x-data="{ sidebarOpen: false }"
-    x-on:livewire:navigated.window="sidebarOpen = false"
-    x-on:keydown.escape.window="sidebarOpen = false"
+    x-data="{ sidebarOpen: false, logoutConfirmOpen: false }"
+    x-on:livewire:navigated.window="sidebarOpen = false; logoutConfirmOpen = false"
+    x-on:keydown.escape.window="sidebarOpen = false; logoutConfirmOpen = false"
 >
     {{-- Mobile backdrop --}}
     <div
@@ -260,7 +260,7 @@ new class extends Component
             </x-dropdown>
         @endif
 
-        <x-dropdown align="right" width="56">
+        <x-dropdown align="right" width="w-80">
             <x-slot name="trigger">
                 <button type="button" class="flex items-center gap-2 rounded-2xl py-1.5 pl-1.5 pr-3 neu-pressable hover:bg-surface-card">
                     <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-primary-100 text-primary-600">
@@ -272,16 +272,99 @@ new class extends Component
             </x-slot>
 
             <x-slot name="content">
-                <x-dropdown-link :href="route('profile')" wire:navigate>
-                    {{ __('Profile') }}
-                </x-dropdown-link>
+                <!-- User Info Section -->
+                <div class="border-b border-surface-inset px-4 py-3.5">
+                    <div class="flex items-center gap-2.5">
+                        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-100 text-primary-600">
+                            <x-icon.user-circle class="h-6 w-6" />
+                        </span>
+                        <div class="min-w-0 flex-1">
+                            <p class="truncate text-sm font-semibold text-slate-800" x-data="{{ json_encode(['name' => auth()->user()->name]) }}" x-text="name" x-on:profile-updated.window="name = $event.detail.name"></p>
+                            <p class="truncate text-xs text-slate-500">{{ auth()->user()->email }}</p>
+                        </div>
+                    </div>
+                </div>
 
-                <button wire:click="logout" class="w-full text-start">
-                    <x-dropdown-link>
-                        {{ __('Log Out') }}
-                    </x-dropdown-link>
-                </button>
+                <!-- Action Buttons -->
+                <div class="space-y-1 p-2">
+                    <a
+                        href="{{ route('profile') }}"
+                        wire:navigate
+                        class="flex w-full items-center gap-2.5 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-colors text-slate-600 hover:bg-surface-card hover:text-primary-600"
+                    >
+                        <x-icon.user-circle class="h-4 w-4 shrink-0" />
+                        {{ __('Profil') }}
+                    </a>
+
+                    <button
+                        @click="logoutConfirmOpen = true"
+                        class="flex w-full items-center gap-2.5 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-colors text-stress-tinggi hover:bg-stress-tinggi/10"
+                    >
+                        <x-icon.logout class="h-4 w-4 shrink-0" />
+                        {{ __('Keluar') }}
+                    </button>
+                </div>
             </x-slot>
         </x-dropdown>
     </header>
+
+    {{-- Logout Confirmation Modal --}}
+    <div
+        x-show="logoutConfirmOpen"
+        x-transition:enter="transition-opacity ease-out duration-200"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition-opacity ease-in duration-150"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40"
+        style="display: none;"
+        x-cloak
+        @click.self="logoutConfirmOpen = false"
+    >
+        <div
+            x-show="logoutConfirmOpen"
+            x-transition:enter="transition-all ease-out duration-200"
+            x-transition:enter-start="opacity-0 scale-95"
+            x-transition:enter-end="opacity-100 scale-100"
+            x-transition:leave="transition-all ease-in duration-150"
+            x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end="opacity-0 scale-95"
+            class="rounded-3xl bg-surface p-6 sm:w-96"
+            @click.stop
+        >
+            {{-- Icon --}}
+            <div class="flex justify-center">
+                <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-stress-tinggi/10 text-stress-tinggi">
+                    <x-icon.exclamation-triangle class="h-6 w-6" />
+                </span>
+            </div>
+
+            {{-- Content --}}
+            <div class="mt-4 text-center">
+                <h3 class="font-display text-lg font-semibold text-slate-800">
+                    {{ __('Yakin ingin keluar?') }}
+                </h3>
+                <p class="mt-2 text-sm text-slate-500">
+                    {{ __('Anda akan keluar dari aplikasi dan perlu login kembali untuk akses kembali.') }}
+                </p>
+            </div>
+
+            {{-- Actions --}}
+            <div class="mt-6 flex gap-3">
+                <button
+                    @click="logoutConfirmOpen = false"
+                    class="flex-1 rounded-2xl bg-surface-card px-4 py-2.5 text-sm font-semibold text-slate-600 transition-colors hover:bg-surface-inset"
+                >
+                    {{ __('Batal') }}
+                </button>
+                <button
+                    wire:click="logout"
+                    class="flex-1 rounded-2xl bg-stress-tinggi px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-red-700"
+                >
+                    {{ __('Keluar') }}
+                </button>
+            </div>
+        </div>
+    </div>
 </div>

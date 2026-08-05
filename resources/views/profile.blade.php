@@ -5,23 +5,17 @@
         </h2>
     </x-slot>
 
-    <div class="max-w-3xl mx-auto space-y-5">
+    <div class="mx-auto space-y-5 px-4 sm:px-6 lg:px-8">
         <x-neu-card padding="p-6 sm:p-8">
-            <div class="max-w-xl">
-                <livewire:profile.update-profile-information-form />
-            </div>
+            <livewire:profile.update-profile-information-form />
         </x-neu-card>
 
         <x-neu-card padding="p-6 sm:p-8">
-            <div class="max-w-xl">
-                <livewire:profile.update-password-form />
-            </div>
+            <livewire:profile.update-password-form />
         </x-neu-card>
 
         <x-neu-card padding="p-6 sm:p-8">
-            <div class="max-w-xl">
-                <livewire:profile.delete-user-form />
-            </div>
+            <livewire:profile.delete-user-form />
         </x-neu-card>
     </div>
 </x-app-layout>
