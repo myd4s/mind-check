@@ -12,6 +12,59 @@
     }
 }
 
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.scroll-animate {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.scroll-animate-left {
+    animation: fadeInLeft 0.6s ease-out forwards;
+}
+
+.scroll-animate-right {
+    animation: fadeInRight 0.6s ease-out forwards;
+}
+
+.scroll-animate.scroll-animate-inactive,
+.scroll-animate-left.scroll-animate-inactive,
+.scroll-animate-right.scroll-animate-inactive {
+    animation: none !important;
+    opacity: 0 !important;
+    transform: none !important;
+}
+
 @layer components {
     /* Permukaan neumorphism dasar: "timbul" dari background surface via dual shadow. */
     .neu-raised {

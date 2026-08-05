@@ -38,21 +38,21 @@
 
             <div class="relative mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:items-center lg:px-8 lg:py-24">
                 <div>
-                    <span class="inline-flex items-center gap-1.5 rounded-full bg-mint-100 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wide text-mint-700">
+                    <span class="scroll-animate inline-flex items-center gap-1.5 rounded-full bg-mint-100 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wide text-mint-700">
                         <x-icon.sparkles class="h-3.5 w-3.5" /> {{ __('Berbasis Instrumen PSS-10') }}
                     </span>
 
-                    <h1 class="mt-5 font-display text-4xl font-semibold leading-[1.1] tracking-tight text-slate-800 sm:text-5xl lg:text-[3.25rem]">
+                    <h1 class="scroll-animate mt-5 font-display text-4xl font-semibold leading-[1.1] tracking-tight text-slate-800 sm:text-5xl lg:text-[3.25rem]">
                         {{ __('Pantau kondisi stress siswa,') }}
                         <span class="text-primary-600">{{ __('sebelum jadi masalah besar.') }}</span>
                     </h1>
 
-                    <p class="mt-5 max-w-xl text-lg leading-relaxed text-slate-500">
+                    <p class="scroll-animate mt-5 max-w-xl text-lg leading-relaxed text-slate-500">
                         {{ __('MindCheck membantu Guru BK mengukur, memantau, dan menindaklanjuti tingkat stress siswa SMP secara berkala — dengan skor yang jelas, riwayat lengkap, dan rekomendasi bacaan untuk siswa.') }}
                     </p>
 
-                    <div class="mt-8 flex flex-wrap items-center gap-4">
-                        <a href="{{ Route::has('login') ? route('login') : '#' }}" wire:navigate class="neu-pressable inline-flex items-center gap-2 rounded-2xl bg-primary-600 px-6 py-3.5 text-sm font-semibold text-white shadow-neu hover:bg-primary-700">
+                    <div class="scroll-animate mt-8 flex flex-wrap items-center gap-4">
+                        <a href="{{ Route::has('login') ? route('login') : '#' }}" wire:navigate class="neu-pressable inline-flex items-center gap-2 rounded-2xl bg-primary-600 px-6 py-3.5 text-sm font-semibold text-white hover:bg-primary-700">
                             {{ __('Masuk ke Sistem') }}
                             <x-icon.chevron direction="right" class="h-4 w-4" />
                         </a>
@@ -61,7 +61,7 @@
                         </a>
                     </div>
 
-                    <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-slate-500">
+                    <div class="scroll-animate mt-10 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-slate-500">
                         <div class="flex items-center gap-2">
                             <x-icon.shield-check class="h-5 w-5 text-mint-600" /> {{ __('Data siswa aman & privat') }}
                         </div>
@@ -72,7 +72,7 @@
                 </div>
 
                 {{-- Dashboard preview mockup --}}
-                <div class="relative mx-auto w-full max-w-md lg:mx-0 lg:justify-self-end">
+                <div class="scroll-animate-right relative mx-auto w-full max-w-md lg:mx-0 lg:justify-self-end">
                     <div class="neu-card p-5">
                         <div class="flex items-center justify-between">
                             <p class="font-display text-sm font-semibold text-slate-600">{{ __('Sebaran Tingkat Stress') }}</p>
@@ -124,35 +124,35 @@
         {{-- Tentang --}}
         <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
             <div class="mx-auto max-w-2xl text-center">
-                <h2 class="font-display text-3xl font-semibold text-slate-800 sm:text-4xl">{{ __('Apa itu MindCheck?') }}</h2>
-                <p class="mt-4 text-lg leading-relaxed text-slate-500">
+                <h2 class="scroll-animate font-display text-3xl font-semibold text-slate-800 sm:text-4xl">{{ __('Apa itu MindCheck?') }}</h2>
+                <p class="scroll-animate mt-4 text-lg leading-relaxed text-slate-500">
                     {{ __('Selama ini asesmen stress siswa dilakukan manual — sulit melacak histori individu dan sulit menemukan siswa yang butuh perhatian segera. MindCheck menstandardisasi proses itu dengan instrumen psikometri baku, dashboard yang mudah dibaca, dan tindak lanjut yang terdokumentasi rapi.') }}
                 </p>
             </div>
 
             <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                <div class="neu-card p-6">
+                <div class="scroll-animate neu-card p-6">
                     <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-100 text-primary-600">
                         <x-icon.clipboard-check class="h-6 w-6" />
                     </span>
                     <h3 class="mt-4 font-display font-semibold text-slate-800">{{ __('Standar Psikometri') }}</h3>
                     <p class="mt-2 text-sm leading-relaxed text-slate-500">{{ __('Skor dihitung otomatis memakai metodologi PSS-10 (Perceived Stress Scale) yang tervalidasi.') }}</p>
                 </div>
-                <div class="neu-card p-6">
+                <div class="scroll-animate neu-card p-6">
                     <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-secondary-100 text-secondary-600">
                         <x-icon.chart-bar class="h-6 w-6" />
                     </span>
                     <h3 class="mt-4 font-display font-semibold text-slate-800">{{ __('Dashboard Visual') }}</h3>
                     <p class="mt-2 text-sm leading-relaxed text-slate-500">{{ __('Sebaran kategori stress per kelas & sekolah, langsung terlihat tanpa perlu hitung manual.') }}</p>
                 </div>
-                <div class="neu-card p-6">
+                <div class="scroll-animate neu-card p-6">
                     <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-bubblegum-100 text-bubblegum-600">
                         <x-icon.heart class="h-6 w-6" />
                     </span>
                     <h3 class="mt-4 font-display font-semibold text-slate-800">{{ __('Catatan & Histori') }}</h3>
                     <p class="mt-2 text-sm leading-relaxed text-slate-500">{{ __('Guru BK bisa memberi catatan personal, tersimpan rapi bersama histori asesmen siswa.') }}</p>
                 </div>
-                <div class="neu-card p-6">
+                <div class="scroll-animate neu-card p-6">
                     <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-sunshine-100 text-sunshine-700">
                         <x-icon.book-open class="h-6 w-6" />
                     </span>
@@ -166,8 +166,8 @@
         <section id="cara-kerja" class="bg-surface-card/60 py-16 lg:py-20">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="mx-auto max-w-2xl text-center">
-                    <h2 class="font-display text-3xl font-semibold text-slate-800 sm:text-4xl">{{ __('Cara Kerjanya') }}</h2>
-                    <p class="mt-4 text-lg text-slate-500">{{ __('Empat langkah sederhana dari sudut pandang siswa.') }}</p>
+                    <h2 class="scroll-animate font-display text-3xl font-semibold text-slate-800 sm:text-4xl">{{ __('Cara Kerjanya') }}</h2>
+                    <p class="scroll-animate mt-4 text-lg text-slate-500">{{ __('Empat langkah sederhana dari sudut pandang siswa.') }}</p>
                 </div>
 
                 <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -189,7 +189,7 @@
                     @endphp
 
                     @foreach ($steps as $i => $step)
-                        <div class="relative neu-card p-6">
+                        <div class="scroll-animate relative neu-card p-6">
                             <span class="absolute -top-3 -left-1 flex h-7 w-7 items-center justify-center rounded-full {{ $stepColors[$step['color']]['badge'] }} font-display text-xs font-bold text-white shadow-neu-sm">
                                 {{ $i + 1 }}
                             </span>
@@ -207,12 +207,12 @@
         {{-- Peran --}}
         <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
             <div class="mx-auto max-w-2xl text-center">
-                <h2 class="font-display text-3xl font-semibold text-slate-800 sm:text-4xl">{{ __('Satu Sistem, Tiga Peran') }}</h2>
-                <p class="mt-4 text-lg text-slate-500">{{ __('Setiap peran punya akses yang relevan dengan tugasnya.') }}</p>
+                <h2 class="scroll-animate font-display text-3xl font-semibold text-slate-800 sm:text-4xl">{{ __('Satu Sistem, Tiga Peran') }}</h2>
+                <p class="scroll-animate mt-4 text-lg text-slate-500">{{ __('Setiap peran punya akses yang relevan dengan tugasnya.') }}</p>
             </div>
 
             <div class="mt-12 grid gap-6 lg:grid-cols-3">
-                <div class="neu-card p-7">
+                <div class="scroll-animate-left neu-card p-7">
                     <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-bubblegum-100 text-bubblegum-600">
                         <x-icon.user-circle class="h-6 w-6" />
                     </span>
@@ -224,7 +224,7 @@
                     </ul>
                 </div>
 
-                <div class="neu-card p-7 lg:-translate-y-4">
+                <div class="scroll-animate neu-card p-7 lg:-translate-y-4">
                     <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-100 text-primary-600">
                         <x-icon.users class="h-6 w-6" />
                     </span>
@@ -237,7 +237,7 @@
                     </ul>
                 </div>
 
-                <div class="neu-card p-7">
+                <div class="scroll-animate-right neu-card p-7">
                     <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-sunshine-100 text-sunshine-700">
                         <x-icon.shield-check class="h-6 w-6" />
                     </span>
@@ -253,7 +253,7 @@
 
         {{-- CTA --}}
         <section class="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8 lg:pb-24">
-            <div class="relative overflow-hidden rounded-4xl bg-primary-600 px-8 py-14 text-center shadow-neu-lg sm:px-16">
+            <div class="scroll-animate relative overflow-hidden rounded-4xl bg-primary-600 px-8 py-14 text-center shadow-neu-lg sm:px-16">
                 <svg class="pointer-events-none absolute -right-10 -top-10 h-56 w-56 text-primary-500/60" viewBox="0 0 200 200" fill="currentColor" aria-hidden="true">
                     <circle cx="100" cy="100" r="90" />
                 </svg>
@@ -261,9 +261,9 @@
                     <circle cx="100" cy="100" r="90" />
                 </svg>
 
-                <h2 class="relative font-display text-3xl font-semibold text-white sm:text-4xl">{{ __('Siap mulai memantau kesejahteraan siswa?') }}</h2>
+                <h2 class="relative font-display text-3xl font-semibold text-white sm:text-4xl">{{ __('Siap mulai memantau tingkat stress siswa?') }}</h2>
                 <p class="relative mx-auto mt-4 max-w-xl text-primary-100">{{ __('Masuk dengan akun yang sudah disediakan sekolahmu dan mulai lihat gambaran kondisi siswa hari ini.') }}</p>
-                <a href="{{ Route::has('login') ? route('login') : '#' }}" wire:navigate class="relative mt-8 inline-flex items-center gap-2 rounded-2xl bg-white px-7 py-3.5 text-sm font-semibold text-primary-700 shadow-neu-sm hover:bg-primary-50">
+                <a href="{{ Route::has('login') ? route('login') : '#' }}" wire:navigate class="relative mt-8 inline-flex items-center gap-2 rounded-2xl bg-white px-7 py-3.5 text-sm font-semibold text-primary-700 hover:bg-primary-50">
                     {{ __('Masuk ke Sistem') }}
                     <x-icon.chevron direction="right" class="h-4 w-4" />
                 </a>
