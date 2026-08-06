@@ -22,6 +22,8 @@ class ClassPromotion extends Component
 
     public ?array $result = null;
 
+    public bool $confirmingPromotion = false;
+
     public function mount(): void
     {
         $current = AcademicYear::where('is_active', true)->first();
@@ -57,6 +59,29 @@ class ClassPromotion extends Component
             ->get();
     }
 
+    #[Computed]
+    public function promotionPreview(): array
+    {
+        $willPromote = 0;
+        $willGraduate = 0;
+
+        foreach ($this->sourceClassSummaries as $summary) {
+            $mapping = $this->mappings[$summary->school_class_id] ?? null;
+
+            if ($mapping === 'lulus' || ! $mapping) {
+                $willGraduate += $summary->student_count;
+            } else {
+                $willPromote += $summary->student_count;
+            }
+        }
+
+        return [
+            'total' => $willPromote + $willGraduate,
+            'willPromote' => $willPromote,
+            'willGraduate' => $willGraduate,
+        ];
+    }
+
     public function updatedSourceYearId(): void
     {
         $this->prefillMappings();
@@ -77,6 +102,16 @@ class ClassPromotion extends Component
             // Default mapping: kelas asal itu sendiri — guru BK ubah manual jika naik ke kelas berbeda.
             $this->mappings[$summary->school_class_id] = (string) $summary->school_class_id;
         }
+    }
+
+    public function confirmPromotion(): void
+    {
+        $this->validate([
+            'sourceYearId' => 'required|exists:academic_years,id',
+            'targetYearId' => ['required', 'exists:academic_years,id', 'different:sourceYearId'],
+        ]);
+
+        $this->confirmingPromotion = true;
     }
 
     public function promote(): void
@@ -133,6 +168,8 @@ class ClassPromotion extends Component
             'graduated' => $graduated,
             'skipped' => $skippedExisting,
         ];
+
+        $this->confirmingPromotion = false;
     }
 
     public function render()

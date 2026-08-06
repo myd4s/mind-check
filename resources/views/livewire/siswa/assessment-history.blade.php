@@ -1,9 +1,14 @@
 <div>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
-            <h2 class="font-display text-2xl font-semibold text-slate-800">
-                {{ __('Histori Asesmen') }}
-            </h2>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+                <h2 class="font-display text-2xl font-semibold text-slate-800">
+                    {{ __('Histori Asesmen') }}
+                </h2>
+                <p class="mt-1 text-sm text-slate-500">
+                    {{ __('Rekam jejak semua asesmen stress yang sudah kamu kerjakan.') }}
+                </p>
+            </div>
             @if (auth()->user()->student)
                 <a href="{{ route('siswa.report-pdf', auth()->user()->student) }}" class="neu-pressable inline-flex items-center gap-2 rounded-2xl bg-primary-600 px-4 py-2.5 text-sm font-semibold text-white shadow-neu-sm hover:bg-primary-700">
                     <x-icon.document-text class="h-4 w-4" /> {{ __('Export PDF') }}
@@ -12,7 +17,32 @@
         </div>
     </x-slot>
 
-    <div class="max-w-4xl mx-auto space-y-4">
+    <div class="space-y-5">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <x-stat-card icon="clipboard-check" color="mint" :label="__('Total Asesmen Selesai')" :value="$this->summary['total']" />
+            <x-stat-card icon="chart-bar" color="primary" :label="__('Skor Rata-rata')" :value="$this->summary['average'] ?? '—'" />
+
+            <div class="neu-card flex items-start gap-4 p-5">
+                @if ($this->summary['latestCategory'])
+                    <x-mood-character :category="$this->summary['latestCategory']" :gender="$this->student->gender" class="h-12 w-12 shrink-0" />
+                @else
+                    <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-bubblegum-100 text-bubblegum-600">
+                        <x-icon.heart class="h-6 w-6" />
+                    </span>
+                @endif
+                <div>
+                    <p class="text-sm font-medium text-slate-500">{{ __('Kategori Terakhir') }}</p>
+                    <div class="mt-1.5">
+                        @if ($this->summary['latestCategory'])
+                            <x-category-badge :category="$this->summary['latestCategory']" />
+                        @else
+                            <p class="text-lg text-slate-500">—</p>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <x-neu-card padding="p-0">
             <x-table.toolbar placeholder="{{ __('Cari jadwal asesmen...') }}">
             </x-table.toolbar>
@@ -30,7 +60,7 @@
                     </thead>
                     <tbody class="divide-y divide-surface-inset">
                         @forelse ($this->results as $result)
-                            <tr wire:key="result-{{ $result->id }}">
+                            <tr wire:key="result-{{ $result->id }}" class="transition-colors hover:bg-surface">
                                 <td class="whitespace-nowrap px-5 py-3.5 text-sm font-semibold text-slate-700">{{ $result->assessmentSchedule->title }}</td>
                                 <td class="whitespace-nowrap px-5 py-3.5 text-sm text-slate-500">{{ $result->completed_at->translatedFormat('d M Y H:i') }}</td>
                                 <td class="whitespace-nowrap px-5 py-3.5 text-sm text-slate-500">{{ $result->total_score }}</td>
@@ -38,8 +68,9 @@
                                     <x-category-badge :category="$result->category" />
                                 </td>
                                 <td class="whitespace-nowrap px-5 py-3.5 text-right">
-                                    <a href="{{ route('siswa.result-detail', $result) }}" wire:navigate class="text-sm font-semibold text-primary-600 hover:text-primary-700">
+                                    <a href="{{ route('siswa.result-detail', $result) }}" wire:navigate class="inline-flex items-center gap-1 text-sm font-semibold text-primary-600 hover:text-primary-700">
                                         {{ __('Lihat Detail') }}
+                                        <x-icon.chevron direction="right" class="h-3.5 w-3.5" />
                                     </a>
                                 </td>
                             </tr>

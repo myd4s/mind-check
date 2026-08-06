@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="max-w-6xl mx-auto space-y-4">
+    <div class="space-y-4">
         <x-neu-card padding="p-0">
             <x-table.toolbar placeholder="{{ __('Cari nama atau email...') }}">
                 <x-slot name="actions">

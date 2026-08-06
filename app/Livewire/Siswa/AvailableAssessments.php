@@ -29,7 +29,7 @@ class AvailableAssessments extends Component
 
         $completedScheduleIds = AssessmentResult::where('student_id', $student->id)->pluck('assessment_schedule_id');
 
-        return AssessmentSchedule::with('assessment')
+        return AssessmentSchedule::with('assessment.questions')
             ->where('is_active', true)
             ->where('start_at', '<=', now())
             ->where('end_at', '>=', now())

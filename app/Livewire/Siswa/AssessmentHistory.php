@@ -15,6 +15,12 @@ class AssessmentHistory extends Component
     use WithPagination, WithTableControls;
 
     #[Computed]
+    public function student()
+    {
+        return auth()->user()->student;
+    }
+
+    #[Computed]
     public function results()
     {
         $student = auth()->user()->student;
@@ -31,6 +37,24 @@ class AssessmentHistory extends Component
             ))
             ->orderBy($this->sortField ?: 'completed_at', $this->sortField ? $this->sortDirection : 'desc')
             ->paginate($this->perPage);
+    }
+
+    #[Computed]
+    public function summary(): array
+    {
+        $student = auth()->user()->student;
+
+        $allResults = $student
+            ? AssessmentResult::where('student_id', $student->id)->get()
+            : collect();
+
+        $latest = $allResults->sortByDesc('completed_at')->first();
+
+        return [
+            'total' => $allResults->count(),
+            'average' => $allResults->isNotEmpty() ? round($allResults->avg('total_score'), 1) : null,
+            'latestCategory' => $latest?->category,
+        ];
     }
 
     public function render()

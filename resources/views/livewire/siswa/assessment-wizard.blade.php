@@ -1,87 +1,104 @@
 <div>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-display text-2xl font-semibold text-slate-800">
             {{ $schedule->title }}
         </h2>
+        <p class="mt-1 text-sm text-slate-500">{{ $schedule->assessment->title }}</p>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
+    @if ($justSubmitted)
+        {{-- Berhasil submit --}}
+        @php
+            $categoryLabel = ['rendah' => 'Rendah', 'sedang' => 'Sedang', 'tinggi' => 'Tinggi'][$submittedResult['category']];
+        @endphp
+        <div class="mx-auto max-w-xl">
+            <x-neu-card class="space-y-4 text-center">
+                <x-mood-character :category="$submittedResult['category']" :gender="$this->student->gender" class="mx-auto h-36 w-36" />
 
-            @if ($justSubmitted)
-                {{-- Berhasil submit --}}
-                @php
-                    $categoryLabel = ['rendah' => 'Rendah', 'sedang' => 'Sedang', 'tinggi' => 'Tinggi'][$submittedResult['category']];
-                    $categoryColor = ['rendah' => '#16a34a', 'sedang' => '#d97706', 'tinggi' => '#dc2626'][$submittedResult['category']];
-                @endphp
-                <div class="bg-white shadow-sm sm:rounded-lg p-8 text-center space-y-4">
-                    <h3 class="text-lg font-medium text-gray-900">{{ __('Asesmen selesai!') }}</h3>
-                    <p class="text-sm text-gray-600">{{ __('Terima kasih telah menyelesaikan asesmen.') }}</p>
+                <h3 class="font-display text-xl font-semibold text-slate-800">{{ __('Asesmen selesai!') }}</h3>
+                <p class="text-sm text-slate-500">{{ __('Terima kasih telah menyelesaikan asesmen.') }}</p>
 
-                    <div class="flex flex-col items-center gap-1 mt-4">
-                        <span class="text-4xl font-bold text-primary-700">{{ $submittedResult['total_score'] }}</span>
-                        <span class="text-sm text-gray-500">{{ __('Skor Total') }}</span>
-                    </div>
-
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium text-white" style="background-color: {{ $categoryColor }};">
-                        {{ __('Kategori') }}: {{ $categoryLabel }}
-                    </span>
-
-                    <div class="pt-4">
-                        <a href="{{ route('dashboard') }}" wire:navigate class="text-primary-600 hover:text-primary-800 text-sm font-medium">
-                            {{ __('Kembali ke Dashboard') }}
-                        </a>
-                    </div>
+                <div class="mt-2 flex flex-col items-center gap-1">
+                    <span class="font-display text-4xl font-bold text-primary-700">{{ $submittedResult['total_score'] }}</span>
+                    <span class="text-sm text-slate-500">{{ __('Skor Total') }}</span>
                 </div>
-            @elseif ($this->existingResult)
-                {{-- Sudah pernah dikerjakan --}}
-                <div class="bg-white shadow-sm sm:rounded-lg p-8 text-center space-y-2">
-                    <h3 class="text-lg font-medium text-gray-900">{{ __('Anda sudah mengerjakan asesmen ini') }}</h3>
-                    <p class="text-sm text-gray-600">{{ __('Setiap jadwal hanya bisa dikerjakan satu kali.') }}</p>
-                    <a href="{{ route('dashboard') }}" wire:navigate class="inline-block mt-4 text-primary-600 hover:text-primary-800 text-sm font-medium">
+
+                <x-category-badge :category="$submittedResult['category']" class="text-sm px-3 py-1.5" />
+
+                <div class="pt-2">
+                    <a href="{{ route('dashboard') }}" wire:navigate class="neu-pressable inline-flex items-center gap-1.5 rounded-2xl neu-raised-sm px-4 py-2 text-sm font-semibold text-slate-600 hover:text-primary-600">
                         {{ __('Kembali ke Dashboard') }}
                     </a>
                 </div>
-            @elseif (! $schedule->isOpenNow())
-                {{-- Di luar jendela waktu --}}
-                <div class="bg-white shadow-sm sm:rounded-lg p-8 text-center space-y-2">
-                    <h3 class="text-lg font-medium text-gray-900">{{ __('Jadwal tidak sedang berlangsung') }}</h3>
-                    <p class="text-sm text-gray-600">
-                        {{ __('Asesmen ini hanya bisa dikerjakan pada') }}
-                        {{ $schedule->start_at->translatedFormat('d M Y H:i') }} &ndash; {{ $schedule->end_at->translatedFormat('d M Y H:i') }}.
-                    </p>
-                    <a href="{{ route('dashboard') }}" wire:navigate class="inline-block mt-4 text-primary-600 hover:text-primary-800 text-sm font-medium">
+            </x-neu-card>
+        </div>
+    @elseif ($this->existingResult)
+        {{-- Sudah pernah dikerjakan --}}
+        <div class="mx-auto max-w-xl">
+            <x-neu-card>
+                <x-empty-state icon="check-circle" :title="__('Anda sudah mengerjakan asesmen ini')" :description="__('Setiap jadwal hanya bisa dikerjakan satu kali.')" />
+                <div class="-mt-4 text-center">
+                    <a href="{{ route('dashboard') }}" wire:navigate class="neu-pressable inline-flex items-center gap-1.5 rounded-2xl neu-raised-sm px-4 py-2 text-sm font-semibold text-slate-600 hover:text-primary-600">
                         {{ __('Kembali ke Dashboard') }}
                     </a>
                 </div>
-            @else
-                {{-- Wizard --}}
-                <div class="bg-white shadow-sm sm:rounded-lg p-6 space-y-6">
+            </x-neu-card>
+        </div>
+    @elseif (! $schedule->isOpenNow())
+        {{-- Di luar jendela waktu --}}
+        <div class="mx-auto max-w-xl">
+            <x-neu-card>
+                <x-empty-state
+                    icon="calendar"
+                    :title="__('Jadwal tidak sedang berlangsung')"
+                    :description="__('Asesmen ini hanya bisa dikerjakan pada :start &ndash; :end.', ['start' => $schedule->start_at->translatedFormat('d M Y H:i'), 'end' => $schedule->end_at->translatedFormat('d M Y H:i')])"
+                />
+                <div class="-mt-4 text-center">
+                    <a href="{{ route('dashboard') }}" wire:navigate class="neu-pressable inline-flex items-center gap-1.5 rounded-2xl neu-raised-sm px-4 py-2 text-sm font-semibold text-slate-600 hover:text-primary-600">
+                        {{ __('Kembali ke Dashboard') }}
+                    </a>
+                </div>
+            </x-neu-card>
+        </div>
+    @else
+        {{-- Wizard --}}
+        @php
+            $total = $this->questions->count();
+            $answeredCount = count($answers);
+            $percent = $total ? round((($currentIndex + 1) / $total) * 100) : 0;
+        @endphp
+        <div class="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_20rem]">
+            <div class="w-full">
+                <x-neu-card class="space-y-6">
                     <div>
-                        <div class="flex justify-between text-xs text-gray-500 mb-1">
-                            <span>{{ __('Soal :current dari :total', ['current' => $currentIndex + 1, 'total' => $this->questions->count()]) }}</span>
-                            <span>{{ round((($currentIndex + 1) / $this->questions->count()) * 100) }}%</span>
+                        <div class="mb-1.5 flex justify-between text-xs font-semibold text-slate-500">
+                            <span>{{ __('Soal :current dari :total', ['current' => $currentIndex + 1, 'total' => $total]) }}</span>
+                            <span>{{ $percent }}%</span>
                         </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2">
-                            <div class="bg-primary-600 h-2 rounded-full transition-all" style="width: {{ (($currentIndex + 1) / $this->questions->count()) * 100 }}%"></div>
+                        <div class="h-2.5 w-full overflow-hidden rounded-full neu-inset-sm">
+                            <div class="h-full rounded-full bg-primary-600 transition-all duration-300" style="width: {{ $percent }}%"></div>
                         </div>
                     </div>
 
                     @if ($this->currentQuestion)
                         <div>
-                            <p class="text-base text-gray-900 font-medium">{{ $this->currentQuestion->text }}</p>
+                            <p class="font-display text-lg font-semibold leading-snug text-slate-800">{{ $this->currentQuestion->text }}</p>
 
-                            <div class="mt-6 space-y-2">
+                            <div class="mt-5 space-y-2.5">
                                 @foreach ([0 => 'Tidak Pernah', 1 => 'Hampir Tidak Pernah', 2 => 'Kadang-kadang', 3 => 'Cukup Sering', 4 => 'Sangat Sering'] as $value => $label)
+                                    @php $isSelected = ($answers[$this->currentQuestion->id] ?? null) === $value; @endphp
                                     <button
                                         type="button"
                                         wire:click="selectAnswer({{ $this->currentQuestion->id }}, {{ $value }})"
                                         wire:key="option-{{ $this->currentQuestion->id }}-{{ $value }}"
-                                        class="w-full text-left px-4 py-3 rounded-md border transition
-                                            {{ ($answers[$this->currentQuestion->id] ?? null) === $value
-                                                ? 'border-primary-500 bg-primary-50 text-primary-800'
-                                                : 'border-gray-200 hover:border-gray-300 text-gray-700' }}"
+                                        class="neu-pressable flex w-full items-center gap-3 rounded-2xl px-4 py-3.5 text-left text-sm font-semibold transition-colors
+                                            {{ $isSelected ? 'bg-primary-600 text-white shadow-neu-sm' : 'neu-raised-sm text-slate-600 hover:text-primary-600' }}"
                                     >
+                                        <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 {{ $isSelected ? 'border-white' : 'border-slate-300' }}">
+                                            @if ($isSelected)
+                                                <span class="h-2.5 w-2.5 rounded-full bg-white"></span>
+                                            @endif
+                                        </span>
                                         {{ $label }}
                                     </button>
                                 @endforeach
@@ -90,10 +107,10 @@
                     @endif
 
                     @error('answers')
-                        <p class="text-sm text-red-600">{{ $message }}</p>
+                        <p class="text-sm font-medium text-stress-tinggi">{{ $message }}</p>
                     @enderror
 
-                    <div class="flex justify-between pt-4">
+                    <div class="flex justify-between pt-2">
                         <x-secondary-button type="button" wire:click="previous" :disabled="$currentIndex === 0">
                             {{ __('Sebelumnya') }}
                         </x-secondary-button>
@@ -108,8 +125,51 @@
                             </x-primary-button>
                         @endif
                     </div>
-                </div>
-            @endif
+                </x-neu-card>
+            </div>
+
+            <div class="space-y-5">
+                <x-neu-card>
+                    <h3 class="font-display text-sm font-semibold uppercase tracking-wide text-slate-500">
+                        {{ __('Progres') }}
+                    </h3>
+
+                    <div class="mt-4 flex items-center gap-4">
+                        <div class="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full neu-inset-sm">
+                            <span class="font-display text-base font-bold text-primary-700">{{ $answeredCount }}/{{ $total }}</span>
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-slate-700">{{ __('Soal terjawab') }}</p>
+                            <p class="text-xs text-slate-500">{{ __('Jawaban tersimpan otomatis di setiap langkah.') }}</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-5 grid grid-cols-5 gap-2">
+                        @foreach ($this->questions as $index => $question)
+                            @php
+                                $answered = array_key_exists($question->id, $answers);
+                                $isCurrent = $index === $currentIndex;
+                            @endphp
+                            <span
+                                wire:key="nav-{{ $question->id }}"
+                                class="flex h-9 items-center justify-center rounded-xl text-xs font-semibold
+                                    {{ $isCurrent ? 'bg-primary-600 text-white shadow-neu-sm' : ($answered ? 'bg-primary-100 text-primary-700' : 'neu-inset-sm text-slate-400') }}"
+                            >
+                                {{ $index + 1 }}
+                            </span>
+                        @endforeach
+                    </div>
+                </x-neu-card>
+
+                <x-neu-card class="flex items-start gap-3">
+                    <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-sunshine-100 text-sunshine-600">
+                        <x-icon.lightbulb class="h-5 w-5" />
+                    </span>
+                    <p class="text-sm text-slate-500">
+                        {{ __('Jawab sesuai perasaanmu selama sebulan terakhir. Tidak ada jawaban benar atau salah.') }}
+                    </p>
+                </x-neu-card>
+            </div>
         </div>
-    </div>
+    @endif
 </div>

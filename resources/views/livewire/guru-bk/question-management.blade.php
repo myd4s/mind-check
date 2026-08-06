@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="max-w-5xl mx-auto space-y-6">
+    <div class="space-y-6">
 
         {{-- Soal Inti PSS-10 --}}
         <x-neu-card padding="p-0">

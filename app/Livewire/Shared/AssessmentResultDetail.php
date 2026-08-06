@@ -41,6 +41,17 @@ class AssessmentResultDetail extends Component
     }
 
     #[Computed]
+    public function categoryDescription(): string
+    {
+        return match ($this->result->category) {
+            'rendah' => __('Skor ini menunjukkan tingkat stress yang rendah. Kamu tampak mampu mengelola tekanan dan tuntutan sehari-hari dengan cukup baik. Pertahankan kebiasaan positif seperti pola tidur cukup, olahraga, dan waktu istirahat yang sudah berjalan selama ini.'),
+            'sedang' => __('Skor ini menunjukkan tingkat stress yang sedang. Beberapa tekanan mulai terasa memberatkan, namun masih dapat dikelola. Coba jaga pola istirahat, atur waktu dengan lebih baik, dan jangan ragu bicarakan bebanmu dengan orang terdekat atau Guru BK jika dirasa perlu.'),
+            'tinggi' => __('Skor ini menunjukkan tingkat stress yang tinggi. Ini adalah sinyal penting untuk segera mendapat dukungan — sangat disarankan untuk berkonsultasi dengan Guru BK agar mendapat pendampingan yang tepat sebelum berdampak lebih jauh pada kesehatan dan aktivitas sehari-hari.'),
+            default => '',
+        };
+    }
+
+    #[Computed]
     public function canManageNote(): bool
     {
         return auth()->user()->hasRoleAtLeast(UserRole::GuruBk);

@@ -78,11 +78,13 @@ class AssessmentWizard extends Component
 
     public function next(): void
     {
-        if (! $this->currentQuestion || ! array_key_exists($this->currentQuestion->id, $this->answers)) {
+        $current = $this->questions->get($this->currentIndex);
+
+        if (! $current || ! array_key_exists($current->id, $this->answers)) {
             return;
         }
 
-        if (! $this->isLastQuestion) {
+        if ($this->currentIndex < $this->questions->count() - 1) {
             $this->currentIndex++;
         }
     }

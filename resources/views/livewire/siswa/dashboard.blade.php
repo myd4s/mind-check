@@ -19,9 +19,13 @@
         <x-stat-card icon="chart-bar" color="primary" :label="__('Skor Terakhir')" :value="$this->latestResult?->total_score ?? '—'" />
 
         <div class="neu-card flex items-start gap-4 p-5">
-            <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-bubblegum-100 text-bubblegum-600">
-                <x-icon.heart class="h-6 w-6" />
-            </span>
+            @if ($this->latestResult)
+                <x-mood-character :category="$this->latestResult->category" :gender="$this->student->gender" class="h-14 w-14 shrink-0" />
+            @else
+                <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-bubblegum-100 text-bubblegum-600">
+                    <x-icon.heart class="h-6 w-6" />
+                </span>
+            @endif
             <div>
                 <p class="text-sm font-medium text-slate-500">{{ __('Kategori Terakhir') }}</p>
                 <div class="mt-1.5">
