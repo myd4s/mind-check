@@ -25,6 +25,6 @@ $textSize = match ($size) {
         </svg>
     </span>
     @if ($showText)
-        <span class="font-display {{ $textSize }} font-semibold tracking-tight text-slate-800">Mind<span class="text-primary-600">Check</span></span>
+        <span class="font-display {{ $textSize }} font-semibold tracking-tight text-slate-800">Mind<span class="text-primary-600">Care</span></span>
     @endif
 </span>

@@ -37,13 +37,23 @@ new #[Layout('layouts.guest')] class extends Component
         </div>
 
         <!-- Password -->
-        <div class="mt-4">
+        <div class="mt-4" x-data="{ showPassword: false }">
             <x-input-label for="password" :value="__('Password')" />
 
-            <x-text-input wire:model="form.password" id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+            <div class="relative">
+                <x-text-input wire:model="form.password" id="password" class="block mt-1 w-full pr-11"
+                                type="password"
+                                x-bind:type="showPassword ? 'text' : 'password'"
+                                name="password"
+                                required autocomplete="current-password" />
+
+                <button type="button" @click="showPassword = !showPassword"
+                        class="absolute inset-y-0 right-0 flex items-center pr-3.5 mt-1 text-slate-400 hover:text-slate-600 focus:outline-none"
+                        :aria-label="showPassword ? '{{ __('Hide password') }}' : '{{ __('Show password') }}'">
+                    <x-icon.eye x-show="!showPassword" class="w-5 h-5" />
+                    <x-icon.eye-slash x-show="showPassword" x-cloak class="w-5 h-5" />
+                </button>
+            </div>
 
             <x-input-error :messages="$errors->get('form.password')" class="mt-2" />
         </div>
