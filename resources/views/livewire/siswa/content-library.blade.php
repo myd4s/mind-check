@@ -67,7 +67,7 @@
 
                         <div class="mt-4 flex items-center justify-between gap-2 border-t border-surface-inset pt-3.5">
                             <span class="truncate text-xs text-slate-500">
-                                {{ $content->author ?: __('MindCheck') }} &middot; {{ $content->published_at->translatedFormat('d M Y') }}
+                                {{ $content->author ?: __('MindCare') }} &middot; {{ $content->published_at->translatedFormat('d M Y') }}
                             </span>
                             <span class="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-primary-600">
                                 {{ $isVideo ? __('Tonton') : __('Baca') }}

@@ -48,7 +48,7 @@ Guru BK membutuhkan alat bantu digital untuk memantau tingkat stress siswa secar
 
 1. Admin membuat akun Guru BK.
 2. Guru BK membuat **Tahun Ajaran** aktif (mis. "2026/2027") dan **Kelas** (mis. "X IPA 1").
-3. Guru BK membuat data **Siswa** (manual atau import Excel) — email login = `{nisn}@mindcheck.com`, password default = NISN, **wajib diganti siswa saat login pertama kali** — sekaligus menempatkan siswa ke kelas pada tahun ajaran berjalan.
+3. Guru BK membuat data **Siswa** (manual atau import Excel) — email login = `{nisn}@mindcare.com`, password default = NISN, **wajib diganti siswa saat login pertama kali** — sekaligus menempatkan siswa ke kelas pada tahun ajaran berjalan.
 4. Guru BK mengelola **Bank Soal PSS-10** (default ter-seed) dan membuat **Assessment** (mengelompokkan soal menjadi satu paket asesmen).
 5. Guru BK membuat **Jadwal Assessment** (periode buka–tutup, target kelas/seluruh siswa) untuk tahun ajaran berjalan.
 6. Siswa mengerjakan asesmen dalam jendela waktu jadwal → sistem menghitung skor & kategori otomatis (metodologi PSS-10).
@@ -100,7 +100,7 @@ Sesuai keputusan: menggunakan **instrumen standar PSS-10**, bukan bobot bebas pe
 ### Guru BK (+ semua fitur Siswa)
 - CRUD Tahun Ajaran.
 - CRUD Kelas.
-- CRUD Siswa, termasuk **import Excel** (template kolom: `NISN, Nama, Jenis Kelamin, Kelas` — email login digenerate otomatis `{nisn}@mindcheck.com`, password default = NISN).
+- CRUD Siswa, termasuk **import Excel** (template kolom: `NISN, Nama, Jenis Kelamin, Kelas` — email login digenerate otomatis `{nisn}@mindcare.com`, password default = NISN).
 - Kenaikan/assign kelas siswa antar tahun ajaran (bulk action, mempertahankan histori; siswa lulus ditandai `nonaktif`).
 - CRUD Bank Soal (soal PSS-10 default + soal tambahan opsional).
 - CRUD Assessment (paket soal).
@@ -142,7 +142,7 @@ Sesuai keputusan: menggunakan **instrumen standar PSS-10**, bukan bobot bebas pe
 
 1. **Soal PSS-10 vs CRUD bebas** — ✅ Setuju. Bank soal core PSS-10 ter-seed & tidak diubah agar valid secara psikometri; Guru BK tetap punya UI CRUD untuk soal tambahan/paket lain.
 2. **Password pertama kali** — ✅ Dipaksa. Siswa wajib ganti password saat login pertama kali (password default = NISN dianggap mudah ditebak).
-3. **Email login siswa** — format tetap: `{nisn}@mindcheck.com`, digenerate otomatis oleh sistem (tidak perlu kolom email di template Excel).
+3. **Email login siswa** — format tetap: `{nisn}@mindcare.com`, digenerate otomatis oleh sistem (tidak perlu kolom email di template Excel).
 4. **Pengerjaan asesmen** — 1x per jadwal, tidak bisa diulang.
 5. **Notifikasi ke Guru BK** — cukup ditampilkan di sistem (ikon bell, in-app, read-only), **tidak perlu** push/email. Lihat detail teknis di §7.
 6. **Kelulusan siswa** — `student_class_histories.status` diisi `nonaktif` saat siswa lulus/keluar; histori asesmen tetap tersimpan.

@@ -59,7 +59,7 @@ Cara pakai: kerjakan satu issue, centang DoD-nya, baru lanjut issue berikutnya. 
 **Deps:** #3, #4
 **Scope:**
 - Migration `students` (relasi ke `users`, NISN, jenis kelamin, dll) + `student_class_histories` (student_id, academic_year_id, school_class_id, status `aktif`/`nonaktif`).
-- Form create siswa: input NISN, nama, jenis kelamin, pilih kelas (pada tahun ajaran aktif) → otomatis buat `User` (email `{nisn}@mindcheck.com`, password default = NISN, role `siswa`) + record `student_class_histories` status `aktif`.
+- Form create siswa: input NISN, nama, jenis kelamin, pilih kelas (pada tahun ajaran aktif) → otomatis buat `User` (email `{nisn}@mindcare.com`, password default = NISN, role `siswa`) + record `student_class_histories` status `aktif`.
 - Flag `must_change_password` pada `users` (dipakai issue #6).
 - List & edit & nonaktifkan siswa.
 **DoD:**

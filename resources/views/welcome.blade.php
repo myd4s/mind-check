@@ -5,8 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'MindCheck') }} — Pengecekan Tingkat Stress Siswa</title>
-        <meta name="description" content="MindCheck membantu Guru BK memantau tingkat stress siswa SMP secara berkala dengan instrumen PSS-10, lengkap dengan dashboard visual, catatan, dan literasi penanganan stress.">
+        <title>{{ config('app.name', 'MindCare') }} — Pengecekan Tingkat Stress Siswa</title>
+        <meta name="description" content="MindCare membantu Guru BK memantau tingkat stress siswa SMP secara berkala dengan instrumen PSS-10, lengkap dengan dashboard visual, catatan, dan literasi penanganan stress.">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -48,7 +48,7 @@
                     </h1>
 
                     <p class="scroll-animate mt-5 max-w-xl text-lg leading-relaxed text-slate-500">
-                        {{ __('MindCheck membantu Guru BK mengukur, memantau, dan menindaklanjuti tingkat stress siswa SMP secara berkala — dengan skor yang jelas, riwayat lengkap, dan rekomendasi bacaan untuk siswa.') }}
+                        {{ __('MindCare membantu Guru BK mengukur, memantau, dan menindaklanjuti tingkat stress siswa SMP secara berkala — dengan skor yang jelas, riwayat lengkap, dan rekomendasi bacaan untuk siswa.') }}
                     </p>
 
                     <div class="scroll-animate mt-8 flex flex-wrap items-center gap-4">
@@ -124,9 +124,9 @@
         {{-- Tentang --}}
         <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
             <div class="mx-auto max-w-2xl text-center">
-                <h2 class="scroll-animate font-display text-3xl font-semibold text-slate-800 sm:text-4xl">{{ __('Apa itu MindCheck?') }}</h2>
+                <h2 class="scroll-animate font-display text-3xl font-semibold text-slate-800 sm:text-4xl">{{ __('Apa itu MindCare?') }}</h2>
                 <p class="scroll-animate mt-4 text-lg leading-relaxed text-slate-500">
-                    {{ __('Selama ini asesmen stress siswa dilakukan manual — sulit melacak histori individu dan sulit menemukan siswa yang butuh perhatian segera. MindCheck menstandardisasi proses itu dengan instrumen psikometri baku, dashboard yang mudah dibaca, dan tindak lanjut yang terdokumentasi rapi.') }}
+                    {{ __('Selama ini asesmen stress siswa dilakukan manual — sulit melacak histori individu dan sulit menemukan siswa yang butuh perhatian segera. MindCare menstandardisasi proses itu dengan instrumen psikometri baku, dashboard yang mudah dibaca, dan tindak lanjut yang terdokumentasi rapi.') }}
                 </p>
             </div>
 
@@ -274,7 +274,7 @@
         <footer class="border-t border-surface-inset">
             <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-8 text-sm text-slate-500 sm:flex-row sm:px-6 lg:px-8">
                 <x-brand-mark size="sm" class="opacity-90" />
-                <p>&copy; {{ now()->year }} MindCheck &middot; {{ __('Sistem Pengecekan Tingkat Stress Siswa') }}</p>
+                <p>&copy; {{ now()->year }} MindCare &middot; {{ __('Sistem Pengecekan Tingkat Stress Siswa') }}</p>
             </div>
         </footer>
     </body>

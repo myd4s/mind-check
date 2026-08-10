@@ -39,13 +39,13 @@ class GuruBkAccountManagementTest extends TestCase
             ->test(GuruBkAccountManagement::class)
             ->call('create')
             ->set('name', 'Guru BK Baru')
-            ->set('email', 'guru.baru@mindcheck.com')
+            ->set('email', 'guru.baru@mindcare.com')
             ->set('password', 'rahasia123')
             ->call('save');
 
         $this->assertDatabaseHas('users', [
             'name' => 'Guru BK Baru',
-            'email' => 'guru.baru@mindcheck.com',
+            'email' => 'guru.baru@mindcare.com',
             'role' => UserRole::GuruBk->value,
             'is_active' => true,
         ]);
@@ -59,14 +59,14 @@ class GuruBkAccountManagementTest extends TestCase
             ->test(GuruBkAccountManagement::class)
             ->call('create')
             ->set('name', 'Guru BK Baru')
-            ->set('email', 'guru.baru@mindcheck.com')
+            ->set('email', 'guru.baru@mindcare.com')
             ->set('password', 'rahasia123')
             ->call('save');
 
         $this->post('/logout');
 
         $response = $this->post('/login', [
-            'email' => 'guru.baru@mindcheck.com',
+            'email' => 'guru.baru@mindcare.com',
             'password' => 'rahasia123',
         ]);
 
@@ -76,7 +76,7 @@ class GuruBkAccountManagementTest extends TestCase
     public function test_admin_can_edit_guru_bk_account(): void
     {
         $admin = User::factory()->create(['role' => UserRole::Admin]);
-        $guruBk = User::factory()->create(['role' => UserRole::GuruBk, 'name' => 'Nama Lama', 'email' => 'lama@mindcheck.com']);
+        $guruBk = User::factory()->create(['role' => UserRole::GuruBk, 'name' => 'Nama Lama', 'email' => 'lama@mindcare.com']);
 
         Livewire::actingAs($admin)
             ->test(GuruBkAccountManagement::class)
@@ -84,7 +84,7 @@ class GuruBkAccountManagementTest extends TestCase
             ->set('name', 'Nama Baru')
             ->call('save');
 
-        $this->assertDatabaseHas('users', ['id' => $guruBk->id, 'name' => 'Nama Baru', 'email' => 'lama@mindcheck.com']);
+        $this->assertDatabaseHas('users', ['id' => $guruBk->id, 'name' => 'Nama Baru', 'email' => 'lama@mindcare.com']);
     }
 
     public function test_admin_can_deactivate_and_reactivate_guru_bk_account(): void
@@ -105,13 +105,13 @@ class GuruBkAccountManagementTest extends TestCase
     {
         User::factory()->create([
             'role' => UserRole::GuruBk,
-            'email' => 'nonaktif@mindcheck.com',
+            'email' => 'nonaktif@mindcare.com',
             'password' => 'rahasia123',
             'is_active' => false,
         ]);
 
         $this->post('/login', [
-            'email' => 'nonaktif@mindcheck.com',
+            'email' => 'nonaktif@mindcare.com',
             'password' => 'rahasia123',
         ]);
 
@@ -121,13 +121,13 @@ class GuruBkAccountManagementTest extends TestCase
     public function test_email_must_be_unique(): void
     {
         $admin = User::factory()->create(['role' => UserRole::Admin]);
-        User::factory()->create(['role' => UserRole::GuruBk, 'email' => 'dipakai@mindcheck.com']);
+        User::factory()->create(['role' => UserRole::GuruBk, 'email' => 'dipakai@mindcare.com']);
 
         Livewire::actingAs($admin)
             ->test(GuruBkAccountManagement::class)
             ->call('create')
             ->set('name', 'Guru Baru')
-            ->set('email', 'dipakai@mindcheck.com')
+            ->set('email', 'dipakai@mindcare.com')
             ->set('password', 'rahasia123')
             ->call('save')
             ->assertHasErrors(['email']);

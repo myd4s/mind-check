@@ -53,7 +53,7 @@ class StudentManagementTest extends TestCase
 
         $this->assertDatabaseHas('students', ['nisn' => '1234567890']);
 
-        $user = User::where('email', '1234567890@mindcheck.com')->first();
+        $user = User::where('email', '1234567890@mindcare.com')->first();
         $this->assertNotNull($user);
         $this->assertTrue($user->role === UserRole::Siswa);
         $this->assertTrue($user->must_change_password);

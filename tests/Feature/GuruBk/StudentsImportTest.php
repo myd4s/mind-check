@@ -77,8 +77,8 @@ class StudentsImportTest extends TestCase
 
         $this->assertDatabaseHas('students', ['nisn' => '1111111111']);
         $this->assertDatabaseHas('students', ['nisn' => '2222222222']);
-        $this->assertDatabaseHas('users', ['email' => '1111111111@mindcheck.com']);
-        $this->assertDatabaseHas('users', ['email' => '2222222222@mindcheck.com']);
+        $this->assertDatabaseHas('users', ['email' => '1111111111@mindcare.com']);
+        $this->assertDatabaseHas('users', ['email' => '2222222222@mindcare.com']);
     }
 
     public function test_invalid_rows_are_reported_without_blocking_valid_rows(): void

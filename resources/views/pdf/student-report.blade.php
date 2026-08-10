@@ -26,7 +26,7 @@
 </head>
 <body>
     <h1>Laporan Hasil Asesmen Stress</h1>
-    <p class="subtitle">MindCheck &middot; Dicetak pada {{ now()->translatedFormat('d M Y H:i') }}</p>
+    <p class="subtitle">MindCare &middot; Dicetak pada {{ now()->translatedFormat('d M Y H:i') }}</p>
 
     <table class="profile-table">
         <tr>
@@ -87,6 +87,6 @@
         <p>Belum ada catatan dari Guru BK.</p>
     @endforelse
 
-    <p class="footer">Dokumen ini digenerate otomatis oleh sistem MindCheck.</p>
+    <p class="footer">Dokumen ini digenerate otomatis oleh sistem MindCare.</p>
 </body>
 </html>

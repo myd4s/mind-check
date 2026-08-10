@@ -81,7 +81,7 @@ class StudentsImport implements ToCollection, WithHeadingRow
             DB::transaction(function () use ($nisn, $name, $gender, $schoolClass) {
                 $user = User::create([
                     'name' => $name,
-                    'email' => "{$nisn}@mindcheck.com",
+                    'email' => "{$nisn}@mindcare.com",
                     'password' => $nisn,
                     'role' => UserRole::Siswa,
                     'must_change_password' => true,

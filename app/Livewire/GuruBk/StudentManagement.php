@@ -129,7 +129,7 @@ class StudentManagement extends Component
             DB::transaction(function () use ($validated, $activeYear) {
                 $user = User::create([
                     'name' => $validated['name'],
-                    'email' => "{$validated['nisn']}@mindcheck.com",
+                    'email' => "{$validated['nisn']}@mindcare.com",
                     'password' => $validated['nisn'],
                     'role' => UserRole::Siswa,
                     'must_change_password' => true,

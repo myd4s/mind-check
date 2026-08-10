@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'MindCheck') }}</title>
+        <title>{{ config('app.name', 'MindCare') }}</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -38,7 +38,7 @@
             </div>
 
             <p class="relative z-10 mt-8 text-center text-xs text-slate-500">
-                &copy; {{ now()->year }} MindCheck &middot; {{ __('Sistem Pengecekan Tingkat Stress Siswa') }}
+                &copy; {{ now()->year }} MindCare &middot; {{ __('Sistem Pengecekan Tingkat Stress Siswa') }}
             </p>
         </div>
     </body>

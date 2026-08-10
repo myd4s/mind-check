@@ -14,7 +14,7 @@ class CoreAccountsSeeder extends Seeder
     public function run(): void
     {
         User::updateOrCreate(
-            ['email' => 'admin@mindcheck.com'],
+            ['email' => 'admin@mindcare.com'],
             [
                 'name' => 'Admin MindCheck',
                 'password' => 'password',
@@ -24,7 +24,7 @@ class CoreAccountsSeeder extends Seeder
         );
 
         User::updateOrCreate(
-            ['email' => 'gurubk@mindcheck.com'],
+            ['email' => 'gurubk@mindcare.com'],
             [
                 'name' => 'Guru BK Dummy',
                 'password' => 'password',
@@ -34,7 +34,7 @@ class CoreAccountsSeeder extends Seeder
         );
 
         User::updateOrCreate(
-            ['email' => 'siswa@mindcheck.com'],
+            ['email' => 'siswa@mindcare.com'],
             [
                 'name' => 'Siswa Dummy',
                 'password' => 'password',

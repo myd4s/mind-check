@@ -44,7 +44,7 @@
                             <div class="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-500">
                                 <span class="inline-flex items-center gap-1.5">
                                     <x-icon.user-circle class="h-4 w-4" />
-                                    {{ $content->author ?: __('MindCheck') }}
+                                    {{ $content->author ?: __('MindCare') }}
                                 </span>
                                 <span class="inline-flex items-center gap-1.5">
                                     <x-icon.calendar class="h-4 w-4" />
