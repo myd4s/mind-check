@@ -53,9 +53,12 @@
                                     <x-category-badge :category="$result->category" />
                                 </td>
                                 <td class="whitespace-nowrap px-5 py-3.5 text-right">
-                                    <a href="{{ route('siswa.result-detail', $result) }}" wire:navigate class="text-sm font-semibold text-primary-600 hover:text-primary-700">
-                                        {{ __('Lihat Detail') }}
-                                    </a>
+                                    <div class="flex items-center justify-end gap-1">
+                                        <a href="{{ route('siswa.result-detail', $result) }}" wire:navigate class="text-sm font-semibold text-primary-600 hover:text-primary-700">
+                                            {{ __('Lihat Detail') }}
+                                        </a>
+                                        <x-row-action icon="trash" color="danger" wire:click="confirmDelete({{ $result->id }})">{{ __('Hapus') }}</x-row-action>
+                                    </div>
                                 </td>
                             </tr>
                         @empty
@@ -74,4 +77,18 @@
             </div>
         </x-neu-card>
     </div>
+
+    {{-- Modal Konfirmasi Hapus --}}
+    @if ($deletingId !== null)
+    <x-modal name="assessment-result-delete" :show="true" maxWidth="md">
+        <div class="p-6">
+            <h3 class="mb-2 font-display text-lg font-semibold text-slate-800">{{ __('Hapus Hasil Asesmen?') }}</h3>
+            <p class="mb-6 text-sm text-slate-500">{{ __('Skor, kategori, jawaban, dan catatan guru BK pada hasil ini akan ikut terhapus permanen. Tindakan ini tidak bisa dibatalkan.') }}</p>
+            <div class="flex justify-end gap-3">
+                <x-secondary-button wire:click="$set('deletingId', null)">{{ __('Batal') }}</x-secondary-button>
+                <x-danger-button wire:click="delete">{{ __('Hapus') }}</x-danger-button>
+            </div>
+        </div>
+    </x-modal>
+    @endif
 </div>

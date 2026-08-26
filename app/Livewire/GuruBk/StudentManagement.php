@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
@@ -36,9 +37,14 @@ class StudentManagement extends Component
 
     public ?int $school_class_id = null;
 
+    #[Url]
+    public string $classFilter = '';
+
     public bool $showModal = false;
 
     public ?int $deactivatingId = null;
+
+    public ?int $deletingId = null;
 
     public ?array $lastCreatedCredentials = null;
 
@@ -63,16 +69,32 @@ class StudentManagement extends Component
     #[Computed]
     public function students()
     {
+        $activeYear = $this->activeAcademicYear;
+
         return Student::query()
             ->with(['user', 'currentClassHistory.schoolClass'])
             ->join('users', 'users.id', '=', 'students.user_id')
+            // Join tahun ajaran aktif saja (bukan currentClassHistory relation) supaya
+            // kelas bisa dipakai untuk filter & sort langsung di query pagination.
+            // unique(student_id, academic_year_id) menjamin join ini tidak menggandakan baris.
+            ->leftJoin('student_class_histories', function ($join) use ($activeYear) {
+                $join->on('student_class_histories.student_id', '=', 'students.id')
+                    ->where('student_class_histories.academic_year_id', $activeYear?->id);
+            })
+            ->leftJoin('school_classes', 'school_classes.id', '=', 'student_class_histories.school_class_id')
             ->when($this->search, fn ($query) => $query->where(function ($q) {
                 $q->where('users.name', 'like', "%{$this->search}%")
                     ->orWhere('students.nisn', 'like', "%{$this->search}%");
             }))
+            ->when($this->classFilter, fn ($query) => $query->where('school_classes.id', $this->classFilter))
             ->orderBy($this->sortField ?: 'users.name', $this->sortField ? $this->sortDirection : 'asc')
             ->select('students.*')
             ->paginate($this->perPage);
+    }
+
+    public function updatingClassFilter(): void
+    {
+        $this->resetPage();
     }
 
     public function create(): void
@@ -115,7 +137,10 @@ class StudentManagement extends Component
 
         if ($this->editingId) {
             $student = Student::findOrFail($this->editingId);
-            $student->user->update(['name' => $validated['name']]);
+            $student->user->update([
+                'name' => $validated['name'],
+                'email' => "{$validated['nisn']}@mindcare.com",
+            ]);
             $student->update([
                 'nisn' => $validated['nisn'],
                 'gender' => $validated['gender'],
@@ -172,6 +197,23 @@ class StudentManagement extends Component
         $student?->currentClassHistory?->update(['status' => 'nonaktif']);
 
         $this->deactivatingId = null;
+    }
+
+    public function confirmDelete(int $id): void
+    {
+        $this->deletingId = $id;
+    }
+
+    public function delete(): void
+    {
+        $student = Student::with('user')->find($this->deletingId);
+
+        // Hapus lewat User (bukan Student) supaya cascadeOnDelete FK ikut
+        // membersihkan baris students, student_class_histories, dan
+        // assessment_results — tanpa ini User akan jadi baris yatim.
+        $student?->user?->delete();
+
+        $this->deletingId = null;
     }
 
     public function closeModal(): void

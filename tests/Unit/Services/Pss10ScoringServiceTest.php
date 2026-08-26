@@ -91,4 +91,16 @@ class Pss10ScoringServiceTest extends TestCase
         $this->assertSame('tinggi', $service->categorize(27));
         $this->assertSame('tinggi', $service->categorize(40));
     }
+
+    public function test_category_boundaries_scale_with_extra_questions(): void
+    {
+        $service = new Pss10ScoringService;
+
+        // 10 soal inti + 10 soal pendamping = 20 soal, skor maks 80.
+        // Cut-off proporsional: rendah <=26, sedang <=52, tinggi >52.
+        $this->assertSame('rendah', $service->categorize(26, 20));
+        $this->assertSame('sedang', $service->categorize(27, 20));
+        $this->assertSame('sedang', $service->categorize(52, 20));
+        $this->assertSame('tinggi', $service->categorize(53, 20));
+    }
 }

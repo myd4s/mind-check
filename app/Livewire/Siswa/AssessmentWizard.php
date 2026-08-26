@@ -133,7 +133,7 @@ class AssessmentWizard extends Component
 
             $result->update([
                 'total_score' => $totalScore,
-                'category' => $scoring->categorize($totalScore),
+                'category' => $scoring->categorize($totalScore, $this->questions->count()),
             ]);
 
             return $result;

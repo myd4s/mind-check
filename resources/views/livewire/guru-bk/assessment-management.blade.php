@@ -77,7 +77,13 @@
                 </div>
 
                 <div>
-                    <x-input-label :value="__('Pilih Soal')" />
+                    <div class="flex items-center justify-between">
+                        <x-input-label :value="__('Pilih Soal')" />
+                        <label class="flex cursor-pointer items-center gap-2 text-xs font-semibold text-slate-500">
+                            <input type="checkbox" wire:click="toggleSelectAll($event.target.checked)" @checked($this->allQuestionsSelected) class="rounded border-slate-300 text-primary-600 focus:ring-primary-400">
+                            {{ __('Pilih Semua') }}
+                        </label>
+                    </div>
                     <x-input-error :messages="$errors->get('selectedQuestionIds')" class="mt-1" />
                     <div class="neu-inset-sm mt-2 max-h-72 divide-y divide-surface-inset overflow-y-auto rounded-2xl">
                         @foreach ($this->allQuestions as $question)

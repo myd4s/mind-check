@@ -29,6 +29,14 @@
 
         <x-neu-card padding="p-0">
             <x-table.toolbar placeholder="{{ __('Cari nama atau NISN...') }}">
+                <x-slot name="filters">
+                    <x-select wire:model.live="classFilter" :full="false" class="min-w-[9rem]">
+                        <option value="">{{ __('Semua Kelas') }}</option>
+                        @foreach ($this->schoolClasses as $class)
+                            <option value="{{ $class->id }}">{{ $class->name }}</option>
+                        @endforeach
+                    </x-select>
+                </x-slot>
                 <x-slot name="actions">
                     <x-secondary-button type="button" wire:click="openImportModal" :disabled="! $this->activeAcademicYear">
                         {{ __('Import Excel') }}
@@ -46,7 +54,7 @@
                             <x-table.th-sort field="users.name" :sort-field="$sortField" :sort-direction="$sortDirection">{{ __('Nama') }}</x-table.th-sort>
                             <x-table.th-sort field="students.nisn" :sort-field="$sortField" :sort-direction="$sortDirection">{{ __('NISN') }}</x-table.th-sort>
                             <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">{{ __('Jenis Kelamin') }}</th>
-                            <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">{{ __('Kelas') }}</th>
+                            <x-table.th-sort field="school_classes.grade_level" :sort-field="$sortField" :sort-direction="$sortDirection">{{ __('Kelas') }}</x-table.th-sort>
                             <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">{{ __('Status') }}</th>
                             <th class="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500">{{ __('Aksi') }}</th>
                         </tr>
@@ -73,6 +81,7 @@
                                         @if ($student->currentClassHistory?->status === 'aktif')
                                             <x-row-action icon="x-mark" color="danger" wire:click="confirmDeactivate({{ $student->id }})">{{ __('Nonaktifkan') }}</x-row-action>
                                         @endif
+                                        <x-row-action icon="trash" color="danger" wire:click="confirmDelete({{ $student->id }})">{{ __('Hapus') }}</x-row-action>
                                     </div>
                                 </td>
                             </tr>
@@ -110,10 +119,12 @@
 
                 <div>
                     <x-input-label for="nisn" :value="__('NISN')" />
-                    <x-text-input wire:model="nisn" id="nisn" type="text" class="mt-1.5 block w-full" :disabled="(bool) $editingId" />
+                    <x-text-input wire:model="nisn" id="nisn" type="text" class="mt-1.5 block w-full" />
                     <x-input-error :messages="$errors->get('nisn')" class="mt-2" />
                     @unless ($editingId)
                         <p class="mt-1 text-xs text-slate-500">{{ __('Akan menjadi password default & bagian dari email login siswa.') }}</p>
+                    @else
+                        <p class="mt-1 text-xs text-slate-500">{{ __('Mengubah NISN turut memperbarui email login siswa (password tidak berubah).') }}</p>
                     @endunless
                 </div>
 
@@ -161,6 +172,20 @@
             <div class="flex justify-end gap-3">
                 <x-secondary-button wire:click="$set('deactivatingId', null)">{{ __('Batal') }}</x-secondary-button>
                 <x-danger-button wire:click="deactivate">{{ __('Nonaktifkan') }}</x-danger-button>
+            </div>
+        </div>
+    </x-modal>
+    @endif
+
+    {{-- Modal Konfirmasi Hapus --}}
+    @if ($deletingId !== null)
+    <x-modal name="student-delete" :show="true" maxWidth="md">
+        <div class="p-6">
+            <h3 class="mb-2 font-display text-lg font-semibold text-slate-800">{{ __('Hapus Siswa?') }}</h3>
+            <p class="mb-6 text-sm text-slate-500">{{ __('Akun login, histori kelas, dan seluruh hasil asesmen siswa ini akan ikut terhapus permanen. Tindakan ini tidak bisa dibatalkan.') }}</p>
+            <div class="flex justify-end gap-3">
+                <x-secondary-button wire:click="$set('deletingId', null)">{{ __('Batal') }}</x-secondary-button>
+                <x-danger-button wire:click="delete">{{ __('Hapus') }}</x-danger-button>
             </div>
         </div>
     </x-modal>

@@ -43,6 +43,21 @@ class AssessmentManagement extends Component
         return Question::where('is_active', true)->orderBy('order')->get();
     }
 
+    #[Computed]
+    public function allQuestionsSelected(): bool
+    {
+        return $this->allQuestions->isNotEmpty()
+            && $this->allQuestions->every(fn (Question $question) => (bool) ($this->selectedQuestionIds[$question->id] ?? false));
+    }
+
+    public function toggleSelectAll(bool $value): void
+    {
+        $this->selectedQuestionIds = $this->allQuestions
+            ->pluck('id')
+            ->mapWithKeys(fn ($id) => [$id => $value])
+            ->all();
+    }
+
     public function create(): void
     {
         $this->resetForm();

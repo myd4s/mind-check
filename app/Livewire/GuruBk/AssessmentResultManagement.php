@@ -26,6 +26,8 @@ class AssessmentResultManagement extends Component
     #[Url]
     public string $categoryFilter = '';
 
+    public ?int $deletingId = null;
+
     // Default 15/halaman dipertahankan (sebelum redesain hardcoded paginate(15)) — property $perPage
     // sudah dideklarasikan trait WithTableControls, jadi di-set lewat mount() bukan redeklarasi properti.
     public function mount(): void
@@ -77,6 +79,18 @@ class AssessmentResultManagement extends Component
             }))
             ->orderBy($this->sortField ?: 'completed_at', $this->sortField ? $this->sortDirection : 'desc')
             ->paginate($this->perPage);
+    }
+
+    public function confirmDelete(int $id): void
+    {
+        $this->deletingId = $id;
+    }
+
+    public function delete(): void
+    {
+        AssessmentResult::find($this->deletingId)?->delete();
+
+        $this->deletingId = null;
     }
 
     public function render()

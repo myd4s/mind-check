@@ -16,14 +16,21 @@ class Pss10ScoringService
     }
 
     /**
-     * Kategori berdasar skor total 0-40 (PRD §4):
-     * 0-13 Rendah/Normal, 14-26 Sedang, 27-40 Tinggi.
+     * Kategori berdasar skor total, proporsional terhadap jumlah soal yang
+     * benar-benar dinilai (skala 0-4 per soal). Cut-off PSS-10 standar
+     * (0-13 Rendah, 14-26 Sedang, 27-40 Tinggi; PRD §4) berlaku sebagai
+     * rasio (32.5% / 65% dari skor maksimum) sehingga tetap valid saat
+     * assessment berisi soal pendamping/opsional di luar 10 soal inti.
      */
-    public function categorize(int $totalScore): string
+    public function categorize(int $totalScore, int $questionCount = 10): string
     {
+        $maxScore = $questionCount * 4;
+        $lowCutoff = (int) round($maxScore * 13 / 40);
+        $mediumCutoff = (int) round($maxScore * 26 / 40);
+
         return match (true) {
-            $totalScore <= 13 => 'rendah',
-            $totalScore <= 26 => 'sedang',
+            $totalScore <= $lowCutoff => 'rendah',
+            $totalScore <= $mediumCutoff => 'sedang',
             default => 'tinggi',
         };
     }
