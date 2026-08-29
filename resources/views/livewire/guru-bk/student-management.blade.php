@@ -20,6 +20,19 @@
             </div>
         @endif
 
+        @if ($resetPasswordResult)
+            <div class="neu-card flex items-start justify-between gap-4 border-l-4 border-primary-500 p-4">
+                <div class="text-sm text-slate-700">
+                    <p class="mb-1 font-semibold text-primary-700">{{ __('Password :name berhasil direset.', ['name' => $resetPasswordResult['name']]) }}</p>
+                    <p>{{ __('Email login') }}: <span class="font-mono">{{ $resetPasswordResult['email'] }}</span></p>
+                    <p>{{ __('Password baru') }}: <span class="font-mono">{{ $resetPasswordResult['password'] }}</span></p>
+                </div>
+                <button wire:click="$set('resetPasswordResult', null)" class="shrink-0 text-sm font-semibold text-primary-600 hover:text-primary-800">
+                    {{ __('Tutup') }}
+                </button>
+            </div>
+        @endif
+
         @if (! $this->activeAcademicYear)
             <div class="neu-card flex items-center gap-3 border-l-4 border-sunshine-500 p-4 text-sm text-slate-700">
                 <x-icon.exclamation-triangle class="h-5 w-5 shrink-0 text-sunshine-600" />
@@ -78,6 +91,7 @@
                                 <td class="whitespace-nowrap px-5 py-3.5 text-right">
                                     <div class="flex items-center justify-end gap-1">
                                         <x-row-action icon="pencil" color="primary" wire:click="edit({{ $student->id }})">{{ __('Edit') }}</x-row-action>
+                                        <x-row-action icon="key" color="secondary" wire:click="confirmResetPassword({{ $student->id }})">{{ __('Reset Password') }}</x-row-action>
                                         @if ($student->currentClassHistory?->status === 'aktif')
                                             <x-row-action icon="x-mark" color="danger" wire:click="confirmDeactivate({{ $student->id }})">{{ __('Nonaktifkan') }}</x-row-action>
                                         @endif
@@ -172,6 +186,20 @@
             <div class="flex justify-end gap-3">
                 <x-secondary-button wire:click="$set('deactivatingId', null)">{{ __('Batal') }}</x-secondary-button>
                 <x-danger-button wire:click="deactivate">{{ __('Nonaktifkan') }}</x-danger-button>
+            </div>
+        </div>
+    </x-modal>
+    @endif
+
+    {{-- Modal Konfirmasi Reset Password --}}
+    @if ($resettingPasswordId !== null)
+    <x-modal name="student-reset-password" :show="true" maxWidth="md">
+        <div class="p-6">
+            <h3 class="mb-2 font-display text-lg font-semibold text-slate-800">{{ __('Reset Password Siswa?') }}</h3>
+            <p class="mb-6 text-sm text-slate-500">{{ __('Password siswa akan dikembalikan ke NISN, dan siswa akan diminta mengganti password saat login berikutnya.') }}</p>
+            <div class="flex justify-end gap-3">
+                <x-secondary-button wire:click="$set('resettingPasswordId', null)">{{ __('Batal') }}</x-secondary-button>
+                <x-danger-button wire:click="resetPassword">{{ __('Reset Password') }}</x-danger-button>
             </div>
         </div>
     </x-modal>

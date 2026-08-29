@@ -46,7 +46,11 @@ class StudentManagement extends Component
 
     public ?int $deletingId = null;
 
+    public ?int $resettingPasswordId = null;
+
     public ?array $lastCreatedCredentials = null;
+
+    public ?array $resetPasswordResult = null;
 
     public bool $showImportModal = false;
 
@@ -101,6 +105,7 @@ class StudentManagement extends Component
     {
         $this->resetForm();
         $this->lastCreatedCredentials = null;
+        $this->resetPasswordResult = null;
         $this->showModal = true;
     }
 
@@ -114,6 +119,7 @@ class StudentManagement extends Component
         $this->gender = $student->gender->value;
         $this->school_class_id = $student->currentClassHistory?->school_class_id;
         $this->lastCreatedCredentials = null;
+        $this->resetPasswordResult = null;
         $this->showModal = true;
     }
 
@@ -197,6 +203,33 @@ class StudentManagement extends Component
         $student?->currentClassHistory?->update(['status' => 'nonaktif']);
 
         $this->deactivatingId = null;
+    }
+
+    public function confirmResetPassword(int $id): void
+    {
+        $this->resettingPasswordId = $id;
+    }
+
+    public function resetPassword(): void
+    {
+        $student = Student::with('user')->find($this->resettingPasswordId);
+
+        if ($student) {
+            // Sama seperti password default saat akun dibuat: nisn + wajib ganti
+            // password di login berikutnya (lihat EnsureUserHasChangedPassword).
+            $student->user->update([
+                'password' => $student->nisn,
+                'must_change_password' => true,
+            ]);
+
+            $this->resetPasswordResult = [
+                'name' => $student->user->name,
+                'email' => $student->user->email,
+                'password' => $student->nisn,
+            ];
+        }
+
+        $this->resettingPasswordId = null;
     }
 
     public function confirmDelete(int $id): void

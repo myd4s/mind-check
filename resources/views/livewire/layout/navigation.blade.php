@@ -77,29 +77,31 @@ new class extends Component
                 {{ __('Dashboard') }}
             </x-sidebar-link>
 
-            @php
-                $assessmentMenuActive = request()->routeIs('siswa.available-assessments', 'siswa.history');
-            @endphp
-            <x-sidebar-menu-group
-                label="{{ __('Asesmen Saya') }}"
-                icon="clipboard-list"
-                :activeSubmenu="$assessmentMenuActive"
-            >
-                <x-sidebar-sublink
-                    :href="route('siswa.available-assessments')"
-                    :active="request()->routeIs('siswa.available-assessments')"
-                    icon="clipboard-check"
+            @if (auth()->user()->role === \App\Enums\UserRole::Siswa)
+                @php
+                    $assessmentMenuActive = request()->routeIs('siswa.available-assessments', 'siswa.history');
+                @endphp
+                <x-sidebar-menu-group
+                    label="{{ __('Asesmen Saya') }}"
+                    icon="clipboard-list"
+                    :activeSubmenu="$assessmentMenuActive"
                 >
-                    {{ __('Asesmen Tersedia') }}
-                </x-sidebar-sublink>
-                <x-sidebar-sublink
-                    :href="route('siswa.history')"
-                    :active="request()->routeIs('siswa.history')"
-                    icon="chart-bar"
-                >
-                    {{ __('Riwayat Asesmen') }}
-                </x-sidebar-sublink>
-            </x-sidebar-menu-group>
+                    <x-sidebar-sublink
+                        :href="route('siswa.available-assessments')"
+                        :active="request()->routeIs('siswa.available-assessments')"
+                        icon="clipboard-check"
+                    >
+                        {{ __('Asesmen Tersedia') }}
+                    </x-sidebar-sublink>
+                    <x-sidebar-sublink
+                        :href="route('siswa.history')"
+                        :active="request()->routeIs('siswa.history')"
+                        icon="chart-bar"
+                    >
+                        {{ __('Riwayat Asesmen') }}
+                    </x-sidebar-sublink>
+                </x-sidebar-menu-group>
+            @endif
 
             <x-sidebar-link :href="route('siswa.content-library')" icon="book-open" :active="request()->routeIs('siswa.content-library', 'siswa.content-detail')">
                 {{ __('Literasi') }}
@@ -108,7 +110,7 @@ new class extends Component
             @if (auth()->user()->hasRoleAtLeast(\App\Enums\UserRole::GuruBk))
                 @php
                     $dataMasterMenuActive = request()->routeIs('guru-bk.academic-years', 'guru-bk.school-classes', 'guru-bk.students', 'guru-bk.class-promotion');
-                    $assessmentMenuActive = request()->routeIs('guru-bk.questions', 'guru-bk.assessments', 'guru-bk.assessment-schedules', 'guru-bk.results', 'guru-bk.contents');
+                    $assessmentMenuActive = request()->routeIs('guru-bk.questions', 'guru-bk.assessments', 'guru-bk.assessment-schedules', 'guru-bk.assessment-participation', 'guru-bk.results', 'guru-bk.contents');
                 @endphp
                 <x-sidebar-menu-group
                     label="{{ __('Data Master') }}"
@@ -170,6 +172,13 @@ new class extends Component
                         icon="calendar"
                     >
                         {{ __('Jadwal Assessment') }}
+                    </x-sidebar-sublink>
+                    <x-sidebar-sublink
+                        :href="route('guru-bk.assessment-participation')"
+                        :active="request()->routeIs('guru-bk.assessment-participation')"
+                        icon="clipboard-check"
+                    >
+                        {{ __('Partisipasi Asesmen') }}
                     </x-sidebar-sublink>
                     <x-sidebar-sublink
                         :href="route('guru-bk.results')"

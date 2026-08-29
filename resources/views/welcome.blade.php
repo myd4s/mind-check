@@ -5,8 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'MindCare') }} — Pengecekan Tingkat Stress Siswa</title>
-        <meta name="description" content="MindCare membantu Guru BK memantau tingkat stress siswa SMP secara berkala dengan instrumen PSS-10, lengkap dengan dashboard visual, catatan, dan literasi penanganan stress.">
+        <title>{{ config('app.name', 'MindCare') }} — Pengecekan Tingkat stres Siswa</title>
+        <meta name="description" content="MindCare membantu Guru BK memantau tingkat stres siswa MAN 2 Jembrana secara berkala dengan instrumen PSS-10, lengkap dengan dashboard visual, catatan, dan literasi penanganan stres.">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -43,12 +43,12 @@
                     </span>
 
                     <h1 class="scroll-animate mt-5 font-display text-4xl font-semibold leading-[1.1] tracking-tight text-slate-800 sm:text-5xl lg:text-[3.25rem]">
-                        {{ __('Pantau kondisi stress siswa,') }}
+                        {{ __('Pantau kondisi stres siswa,') }}
                         <span class="text-primary-600">{{ __('sebelum jadi masalah besar.') }}</span>
                     </h1>
 
                     <p class="scroll-animate mt-5 max-w-xl text-lg leading-relaxed text-slate-500">
-                        {{ __('MindCare membantu Guru BK mengukur, memantau, dan menindaklanjuti tingkat stress siswa SMP secara berkala — dengan skor yang jelas, riwayat lengkap, dan rekomendasi bacaan untuk siswa.') }}
+                        {{ __('MindCare membantu Guru BK mengukur, memantau, dan menindaklanjuti tingkat stres siswa SMP secara berkala — dengan skor yang jelas, riwayat lengkap, dan rekomendasi bacaan untuk siswa.') }}
                     </p>
 
                     <div class="scroll-animate mt-8 flex flex-wrap items-center gap-4">
@@ -71,31 +71,35 @@
                     </div>
                 </div>
 
-                {{-- Dashboard preview mockup --}}
+                {{-- Dashboard preview mockup — data live dari asesmen terakhir (fallback ke contoh bila belum ada hasil) --}}
+                @php
+                    $hero = $heroStats ?? null;
+                    $heroBars = $hero['bars'] ?? [40, 65, 45, 80, 55, 90, 60];
+                @endphp
                 <div class="scroll-animate-right relative mx-auto w-full max-w-md lg:mx-0 lg:justify-self-end">
                     <div class="neu-card p-5">
                         <div class="flex items-center justify-between">
-                            <p class="font-display text-sm font-semibold text-slate-600">{{ __('Sebaran Tingkat Stress') }}</p>
+                            <p class="font-display text-sm font-semibold text-slate-600">{{ __('Sebaran Tingkat stres') }}</p>
                             <x-badge color="mint">{{ __('Live') }}</x-badge>
                         </div>
 
                         <div class="mt-5 grid grid-cols-3 gap-3">
                             <div class="neu-inset-sm rounded-2xl p-3 text-center">
-                                <p class="text-2xl font-display font-semibold text-stress-rendah">62%</p>
+                                <p class="text-2xl font-display font-semibold text-stres-rendah">{{ $hero['rendah'] ?? 62 }}%</p>
                                 <p class="mt-1 text-[11px] font-medium text-slate-500">{{ __('Rendah') }}</p>
                             </div>
                             <div class="neu-inset-sm rounded-2xl p-3 text-center">
-                                <p class="text-2xl font-display font-semibold text-stress-sedang">29%</p>
+                                <p class="text-2xl font-display font-semibold text-stres-sedang">{{ $hero['sedang'] ?? 29 }}%</p>
                                 <p class="mt-1 text-[11px] font-medium text-slate-500">{{ __('Sedang') }}</p>
                             </div>
                             <div class="neu-inset-sm rounded-2xl p-3 text-center">
-                                <p class="text-2xl font-display font-semibold text-stress-tinggi">9%</p>
+                                <p class="text-2xl font-display font-semibold text-stres-tinggi">{{ $hero['tinggi'] ?? 9 }}%</p>
                                 <p class="mt-1 text-[11px] font-medium text-slate-500">{{ __('Tinggi') }}</p>
                             </div>
                         </div>
 
                         <div class="mt-5 flex h-28 items-end gap-2.5 rounded-2xl bg-surface-card p-3">
-                            @foreach ([40, 65, 45, 80, 55, 90, 60] as $bar)
+                            @foreach ($heroBars as $bar)
                                 <div class="flex-1 rounded-full bg-primary-300" style="height: {{ $bar }}%"></div>
                             @endforeach
                         </div>
@@ -104,7 +108,13 @@
                             <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-mint-100 text-mint-600">
                                 <x-icon.check-circle class="h-5 w-5" />
                             </span>
-                            <p class="text-xs font-medium text-mint-700">{{ __('Asesmen minggu ini sudah dikerjakan 48 dari 52 siswa.') }}</p>
+                            <p class="text-xs font-medium text-mint-700">
+                                @if ($hero)
+                                    {{ __('Asesmen ":title" sudah dikerjakan :done dari :total siswa.', ['title' => $hero['title'], 'done' => $hero['done'], 'total' => $hero['total']]) }}
+                                @else
+                                    {{ __('Asesmen minggu ini sudah dikerjakan 48 dari 52 siswa.') }}
+                                @endif
+                            </p>
                         </div>
                     </div>
 
@@ -126,7 +136,7 @@
             <div class="mx-auto max-w-2xl text-center">
                 <h2 class="scroll-animate font-display text-3xl font-semibold text-slate-800 sm:text-4xl">{{ __('Apa itu MindCare?') }}</h2>
                 <p class="scroll-animate mt-4 text-lg leading-relaxed text-slate-500">
-                    {{ __('Selama ini asesmen stress siswa dilakukan manual — sulit melacak histori individu dan sulit menemukan siswa yang butuh perhatian segera. MindCare menstandardisasi proses itu dengan instrumen psikometri baku, dashboard yang mudah dibaca, dan tindak lanjut yang terdokumentasi rapi.') }}
+                    {{ __('Selama ini asesmen stres siswa dilakukan manual — sulit melacak histori individu dan sulit menemukan siswa yang butuh perhatian segera. MindCare menstandardisasi proses itu dengan instrumen psikometri baku, dashboard yang mudah dibaca, dan tindak lanjut yang terdokumentasi rapi.') }}
                 </p>
             </div>
 
@@ -136,14 +146,14 @@
                         <x-icon.clipboard-check class="h-6 w-6" />
                     </span>
                     <h3 class="mt-4 font-display font-semibold text-slate-800">{{ __('Standar Psikometri') }}</h3>
-                    <p class="mt-2 text-sm leading-relaxed text-slate-500">{{ __('Skor dihitung otomatis memakai metodologi PSS-10 (Perceived Stress Scale) yang tervalidasi.') }}</p>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-500">{{ __('Skor dihitung otomatis memakai metodologi PSS-10 (Perceived stres Scale) yang tervalidasi.') }}</p>
                 </div>
                 <div class="scroll-animate neu-card p-6">
                     <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-secondary-100 text-secondary-600">
                         <x-icon.chart-bar class="h-6 w-6" />
                     </span>
                     <h3 class="mt-4 font-display font-semibold text-slate-800">{{ __('Dashboard Visual') }}</h3>
-                    <p class="mt-2 text-sm leading-relaxed text-slate-500">{{ __('Sebaran kategori stress per kelas & sekolah, langsung terlihat tanpa perlu hitung manual.') }}</p>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-500">{{ __('Sebaran kategori stres per kelas & sekolah, langsung terlihat tanpa perlu hitung manual.') }}</p>
                 </div>
                 <div class="scroll-animate neu-card p-6">
                     <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-bubblegum-100 text-bubblegum-600">
@@ -156,8 +166,8 @@
                     <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-sunshine-100 text-sunshine-700">
                         <x-icon.book-open class="h-6 w-6" />
                     </span>
-                    <h3 class="mt-4 font-display font-semibold text-slate-800">{{ __('Literasi Stress') }}</h3>
-                    <p class="mt-2 text-sm leading-relaxed text-slate-500">{{ __('Artikel & video penanganan stress yang bisa diakses siswa kapan saja.') }}</p>
+                    <h3 class="mt-4 font-display font-semibold text-slate-800">{{ __('Literasi stres') }}</h3>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-500">{{ __('Artikel & video penanganan stres yang bisa diakses siswa kapan saja.') }}</p>
                 </div>
             </div>
         </section>
@@ -184,7 +194,7 @@
                             ['icon' => 'user-circle', 'title' => __('Masuk'), 'desc' => __('Login pakai akun yang sudah dibuatkan Guru BK.'), 'color' => 'primary'],
                             ['icon' => 'clipboard-list', 'title' => __('Kerjakan Asesmen'), 'desc' => __('Isi kuesioner PSS-10 saat jadwal asesmen dibuka.'), 'color' => 'secondary'],
                             ['icon' => 'chart-pie', 'title' => __('Lihat Hasil & Catatan'), 'desc' => __('Skor, kategori, dan catatan dari Guru BK langsung tampil.'), 'color' => 'accent'],
-                            ['icon' => 'book-open', 'title' => __('Baca Literasi'), 'desc' => __('Jelajahi artikel & video seputar penanganan stress.'), 'color' => 'mint'],
+                            ['icon' => 'book-open', 'title' => __('Baca Literasi'), 'desc' => __('Jelajahi artikel & video seputar penanganan stres.'), 'color' => 'mint'],
                         ];
                     @endphp
 
@@ -204,53 +214,6 @@
             </div>
         </section>
 
-        {{-- Peran --}}
-        <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-            <div class="mx-auto max-w-2xl text-center">
-                <h2 class="scroll-animate font-display text-3xl font-semibold text-slate-800 sm:text-4xl">{{ __('Satu Sistem, Tiga Peran') }}</h2>
-                <p class="scroll-animate mt-4 text-lg text-slate-500">{{ __('Setiap peran punya akses yang relevan dengan tugasnya.') }}</p>
-            </div>
-
-            <div class="mt-12 grid gap-6 lg:grid-cols-3">
-                <div class="scroll-animate-left neu-card p-7">
-                    <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-bubblegum-100 text-bubblegum-600">
-                        <x-icon.user-circle class="h-6 w-6" />
-                    </span>
-                    <h3 class="mt-4 font-display text-xl font-semibold text-slate-800">{{ __('Siswa') }}</h3>
-                    <ul class="mt-4 space-y-2.5 text-sm text-slate-500">
-                        <li class="flex items-start gap-2"><x-icon.check-circle class="mt-0.5 h-4 w-4 shrink-0 text-bubblegum-500" /> {{ __('Kerjakan asesmen sesuai jadwal') }}</li>
-                        <li class="flex items-start gap-2"><x-icon.check-circle class="mt-0.5 h-4 w-4 shrink-0 text-bubblegum-500" /> {{ __('Lihat statistik & histori diri sendiri') }}</li>
-                        <li class="flex items-start gap-2"><x-icon.check-circle class="mt-0.5 h-4 w-4 shrink-0 text-bubblegum-500" /> {{ __('Baca catatan Guru BK & literasi stress') }}</li>
-                    </ul>
-                </div>
-
-                <div class="scroll-animate neu-card p-7 lg:-translate-y-4">
-                    <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-100 text-primary-600">
-                        <x-icon.users class="h-6 w-6" />
-                    </span>
-                    <h3 class="mt-4 font-display text-xl font-semibold text-slate-800">{{ __('Guru BK') }}</h3>
-                    <ul class="mt-4 space-y-2.5 text-sm text-slate-500">
-                        <li class="flex items-start gap-2"><x-icon.check-circle class="mt-0.5 h-4 w-4 shrink-0 text-primary-500" /> {{ __('Kelola data siswa, kelas & tahun ajaran') }}</li>
-                        <li class="flex items-start gap-2"><x-icon.check-circle class="mt-0.5 h-4 w-4 shrink-0 text-primary-500" /> {{ __('Kelola bank soal, assessment & jadwal') }}</li>
-                        <li class="flex items-start gap-2"><x-icon.check-circle class="mt-0.5 h-4 w-4 shrink-0 text-primary-500" /> {{ __('Pantau dashboard & beri catatan hasil') }}</li>
-                        <li class="flex items-start gap-2"><x-icon.check-circle class="mt-0.5 h-4 w-4 shrink-0 text-primary-500" /> {{ __('Kelola konten literasi & ekspor laporan') }}</li>
-                    </ul>
-                </div>
-
-                <div class="scroll-animate-right neu-card p-7">
-                    <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-sunshine-100 text-sunshine-700">
-                        <x-icon.shield-check class="h-6 w-6" />
-                    </span>
-                    <h3 class="mt-4 font-display text-xl font-semibold text-slate-800">{{ __('Admin') }}</h3>
-                    <ul class="mt-4 space-y-2.5 text-sm text-slate-500">
-                        <li class="flex items-start gap-2"><x-icon.check-circle class="mt-0.5 h-4 w-4 shrink-0 text-sunshine-600" /> {{ __('Kelola akun Guru BK') }}</li>
-                        <li class="flex items-start gap-2"><x-icon.check-circle class="mt-0.5 h-4 w-4 shrink-0 text-sunshine-600" /> {{ __('Mewarisi seluruh akses Guru BK') }}</li>
-                        <li class="flex items-start gap-2"><x-icon.check-circle class="mt-0.5 h-4 w-4 shrink-0 text-sunshine-600" /> {{ __('Pengawasan penuh terhadap sistem') }}</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
         {{-- CTA --}}
         <section class="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8 lg:pb-24">
             <div class="scroll-animate relative overflow-hidden rounded-4xl bg-primary-600 px-8 py-14 text-center shadow-neu-lg sm:px-16">
@@ -261,7 +224,7 @@
                     <circle cx="100" cy="100" r="90" />
                 </svg>
 
-                <h2 class="relative font-display text-3xl font-semibold text-white sm:text-4xl">{{ __('Siap mulai memantau tingkat stress siswa?') }}</h2>
+                <h2 class="relative font-display text-3xl font-semibold text-white sm:text-4xl">{{ __('Siap mulai memantau tingkat stres siswa?') }}</h2>
                 <p class="relative mx-auto mt-4 max-w-xl text-primary-100">{{ __('Masuk dengan akun yang sudah disediakan sekolahmu dan mulai lihat gambaran kondisi siswa hari ini.') }}</p>
                 <a href="{{ Route::has('login') ? route('login') : '#' }}" wire:navigate class="relative mt-8 inline-flex items-center gap-2 rounded-2xl bg-white px-7 py-3.5 text-sm font-semibold text-primary-700 hover:bg-primary-50">
                     {{ __('Masuk ke Sistem') }}
@@ -274,7 +237,7 @@
         <footer class="border-t border-surface-inset">
             <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-8 text-sm text-slate-500 sm:flex-row sm:px-6 lg:px-8">
                 <x-brand-mark size="sm" class="opacity-90" />
-                <p>&copy; {{ now()->year }} MindCare &middot; {{ __('Sistem Pengecekan Tingkat Stress Siswa') }}</p>
+                <p>&copy; {{ now()->year }} MindCare &middot; {{ __('Sistem Pengecekan Tingkat stres Siswa') }}</p>
             </div>
         </footer>
     </body>
